@@ -1,0 +1,1754 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "BETTING ANALYTICS"
+            ],
+            "properties": {
+              "class": "title"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Session Performance"
+            ],
+            "properties": {
+              "class": "subtitle",
+              "id": "analytics-subtitle"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "sep"
+            },
+            "dataUid": "uid-5"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "BET TYPE"
+                ],
+                "properties": {
+                  "class": "hw1"
+                },
+                "dataUid": "uid-7"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "PLACED"
+                ],
+                "properties": {
+                  "class": "hw2"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "WON"
+                ],
+                "properties": {
+                  "class": "hw3"
+                },
+                "dataUid": "uid-9"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "LOST"
+                ],
+                "properties": {
+                  "class": "hw4"
+                },
+                "dataUid": "uid-10"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "NET"
+                ],
+                "properties": {
+                  "class": "hw5"
+                },
+                "dataUid": "uid-11"
+              }
+            ],
+            "properties": {
+              "class": "header"
+            },
+            "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "sep"
+            },
+            "dataUid": "uid-12"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-1"
+                },
+                "dataUid": "uid-14"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-1c"
+                },
+                "dataUid": "uid-15"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-1w"
+                },
+                "dataUid": "uid-16"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-1l"
+                },
+                "dataUid": "uid-17"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-1n"
+                },
+                "dataUid": "uid-18"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-13"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-2"
+                },
+                "dataUid": "uid-20"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-2c"
+                },
+                "dataUid": "uid-21"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-2w"
+                },
+                "dataUid": "uid-22"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-2l"
+                },
+                "dataUid": "uid-23"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-2n"
+                },
+                "dataUid": "uid-24"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-19"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-3"
+                },
+                "dataUid": "uid-26"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-3c"
+                },
+                "dataUid": "uid-27"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-3w"
+                },
+                "dataUid": "uid-28"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-3l"
+                },
+                "dataUid": "uid-29"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-3n"
+                },
+                "dataUid": "uid-30"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-25"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-4"
+                },
+                "dataUid": "uid-32"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-4c"
+                },
+                "dataUid": "uid-33"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-4w"
+                },
+                "dataUid": "uid-34"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-4l"
+                },
+                "dataUid": "uid-35"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-4n"
+                },
+                "dataUid": "uid-36"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-31"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-5"
+                },
+                "dataUid": "uid-38"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-5c"
+                },
+                "dataUid": "uid-39"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-5w"
+                },
+                "dataUid": "uid-40"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-5l"
+                },
+                "dataUid": "uid-41"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-5n"
+                },
+                "dataUid": "uid-42"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-37"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-6"
+                },
+                "dataUid": "uid-44"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-6c"
+                },
+                "dataUid": "uid-45"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-6w"
+                },
+                "dataUid": "uid-46"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-6l"
+                },
+                "dataUid": "uid-47"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-6n"
+                },
+                "dataUid": "uid-48"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-43"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-7"
+                },
+                "dataUid": "uid-50"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-7c"
+                },
+                "dataUid": "uid-51"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-7w"
+                },
+                "dataUid": "uid-52"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-7l"
+                },
+                "dataUid": "uid-53"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-7n"
+                },
+                "dataUid": "uid-54"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-49"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "--"
+                ],
+                "properties": {
+                  "class": "label",
+                  "id": "an-8"
+                },
+                "dataUid": "uid-56"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "stat",
+                  "id": "an-8c"
+                },
+                "dataUid": "uid-57"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "win",
+                  "id": "an-8w"
+                },
+                "dataUid": "uid-58"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "loss",
+                  "id": "an-8l"
+                },
+                "dataUid": "uid-59"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "-"
+                ],
+                "properties": {
+                  "class": "net",
+                  "id": "an-8n"
+                },
+                "dataUid": "uid-60"
+              }
+            ],
+            "properties": {
+              "class": "row"
+            },
+            "dataUid": "uid-55"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "sep"
+            },
+            "dataUid": "uid-61"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Best: --"
+            ],
+            "properties": {
+              "class": "summary",
+              "id": "analytics-best"
+            },
+            "dataUid": "uid-62"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Worst: --"
+            ],
+            "properties": {
+              "class": "summary",
+              "id": "analytics-worst"
+            },
+            "dataUid": "uid-63"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "BACK"
+                ],
+                "properties": {
+                  "class": "btntext"
+                },
+                "dataUid": "uid-65"
+              }
+            ],
+            "properties": {
+              "class": "btn",
+              "id": "btn-back"
+            },
+            "dataUid": "uid-64"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "padding": "12",
+        "gap": "6",
+        "alignItems": "center",
+        "width": "380",
+        "backgroundColor": "rgba(0,20,20,0.92)",
+        "borderRadius": 8,
+        "borderWidth": "1",
+        "borderColor": "#00cccc"
+      }
+    },
+    "title": {
+      "content": {
+        "color": "#00ffff",
+        "fontSize": "16",
+        "fontWeight": "bold"
+      }
+    },
+    "subtitle": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "10"
+      }
+    },
+    "row": {
+      "content": {
+        "flexDirection": "row",
+        "width": "360",
+        "justifyContent": "space-between",
+        "paddingLeft": "4",
+        "paddingRight": "4"
+      }
+    },
+    "label": {
+      "content": {
+        "color": "#cccccc",
+        "fontSize": "9",
+        "width": "100"
+      }
+    },
+    "stat": {
+      "content": {
+        "color": "#ffffff",
+        "fontSize": "9",
+        "width": "60",
+        "textAlign": "center"
+      }
+    },
+    "win": {
+      "content": {
+        "color": "#44ff44",
+        "fontSize": "9",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "loss": {
+      "content": {
+        "color": "#ff4444",
+        "fontSize": "9",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "net": {
+      "content": {
+        "color": "#ffff00",
+        "fontSize": "9",
+        "width": "60",
+        "textAlign": "center"
+      }
+    },
+    "sep": {
+      "content": {
+        "width": "350",
+        "height": "1",
+        "backgroundColor": "#004444"
+      }
+    },
+    "header": {
+      "content": {
+        "flexDirection": "row",
+        "width": "360",
+        "justifyContent": "space-between",
+        "paddingLeft": "4",
+        "paddingRight": "4"
+      }
+    },
+    "htext": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "fontWeight": "bold"
+      }
+    },
+    "hw1": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "width": "100"
+      }
+    },
+    "hw2": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "width": "60",
+        "textAlign": "center"
+      }
+    },
+    "hw3": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "hw4": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "width": "50",
+        "textAlign": "center"
+      }
+    },
+    "hw5": {
+      "content": {
+        "color": "#00aaaa",
+        "fontSize": "8",
+        "width": "60",
+        "textAlign": "center"
+      }
+    },
+    "summary": {
+      "content": {
+        "color": "#ffff00",
+        "fontSize": "10"
+      }
+    },
+    "btn": {
+      "content": {
+        "backgroundColor": "#004444",
+        "padding": "6",
+        "borderRadius": 4,
+        "borderWidth": "1",
+        "borderColor": "#00aaaa",
+        "marginTop": "4"
+      }
+    },
+    "btntext": {
+      "content": {
+        "color": "#00ffff",
+        "fontSize": "10",
+        "textAlign": "center"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 48,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "title": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 10
+      }
+    },
+    "subtitle": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 13
+      }
+    },
+    "row": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 8
+      }
+    },
+    "label": {
+      "start": {
+        "line": 6,
+        "column": 4
+      },
+      "end": {
+        "line": 6,
+        "column": 10
+      }
+    },
+    "stat": {
+      "start": {
+        "line": 7,
+        "column": 4
+      },
+      "end": {
+        "line": 7,
+        "column": 9
+      }
+    },
+    "win": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
+        "column": 8
+      }
+    },
+    "loss": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 9
+      }
+    },
+    "net": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 8
+      }
+    },
+    "sep": {
+      "start": {
+        "line": 11,
+        "column": 4
+      },
+      "end": {
+        "line": 11,
+        "column": 8
+      }
+    },
+    "header": {
+      "start": {
+        "line": 12,
+        "column": 4
+      },
+      "end": {
+        "line": 12,
+        "column": 11
+      }
+    },
+    "htext": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 10
+      }
+    },
+    "hw1": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 8
+      }
+    },
+    "hw2": {
+      "start": {
+        "line": 15,
+        "column": 4
+      },
+      "end": {
+        "line": 15,
+        "column": 8
+      }
+    },
+    "hw3": {
+      "start": {
+        "line": 16,
+        "column": 4
+      },
+      "end": {
+        "line": 16,
+        "column": 8
+      }
+    },
+    "hw4": {
+      "start": {
+        "line": 17,
+        "column": 4
+      },
+      "end": {
+        "line": 17,
+        "column": 8
+      }
+    },
+    "hw5": {
+      "start": {
+        "line": 18,
+        "column": 4
+      },
+      "end": {
+        "line": 18,
+        "column": 8
+      }
+    },
+    "summary": {
+      "start": {
+        "line": 19,
+        "column": 4
+      },
+      "end": {
+        "line": 19,
+        "column": 12
+      }
+    },
+    "btn": {
+      "start": {
+        "line": 20,
+        "column": 4
+      },
+      "end": {
+        "line": 20,
+        "column": 8
+      }
+    },
+    "btntext": {
+      "start": {
+        "line": 21,
+        "column": 4
+      },
+      "end": {
+        "line": 21,
+        "column": 12
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 23,
+        "column": 2
+      },
+      "end": {
+        "line": 47,
+        "column": 14
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 24,
+        "column": 4
+      },
+      "end": {
+        "line": 24,
+        "column": 48
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 25,
+        "column": 4
+      },
+      "end": {
+        "line": 25,
+        "column": 77
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 26,
+        "column": 4
+      },
+      "end": {
+        "line": 26,
+        "column": 39
+      }
+    },
+    "uid-6": {
+      "start": {
+        "line": 27,
+        "column": 4
+      },
+      "end": {
+        "line": 33,
+        "column": 16
+      }
+    },
+    "uid-7": {
+      "start": {
+        "line": 28,
+        "column": 6
+      },
+      "end": {
+        "line": 28,
+        "column": 39
+      }
+    },
+    "uid-8": {
+      "start": {
+        "line": 29,
+        "column": 6
+      },
+      "end": {
+        "line": 29,
+        "column": 37
+      }
+    },
+    "uid-9": {
+      "start": {
+        "line": 30,
+        "column": 6
+      },
+      "end": {
+        "line": 30,
+        "column": 34
+      }
+    },
+    "uid-10": {
+      "start": {
+        "line": 31,
+        "column": 6
+      },
+      "end": {
+        "line": 31,
+        "column": 35
+      }
+    },
+    "uid-11": {
+      "start": {
+        "line": 32,
+        "column": 6
+      },
+      "end": {
+        "line": 32,
+        "column": 34
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 34,
+        "column": 4
+      },
+      "end": {
+        "line": 34,
+        "column": 39
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 35,
+        "column": 4
+      },
+      "end": {
+        "line": 35,
+        "column": 228
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 35,
+        "column": 27
+      },
+      "end": {
+        "line": 35,
+        "column": 66
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 35,
+        "column": 66
+      },
+      "end": {
+        "line": 35,
+        "column": 104
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 35,
+        "column": 104
+      },
+      "end": {
+        "line": 35,
+        "column": 141
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 35,
+        "column": 141
+      },
+      "end": {
+        "line": 35,
+        "column": 179
+      }
+    },
+    "uid-18": {
+      "start": {
+        "line": 35,
+        "column": 179
+      },
+      "end": {
+        "line": 35,
+        "column": 216
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 36,
+        "column": 4
+      },
+      "end": {
+        "line": 36,
+        "column": 228
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 36,
+        "column": 27
+      },
+      "end": {
+        "line": 36,
+        "column": 66
+      }
+    },
+    "uid-21": {
+      "start": {
+        "line": 36,
+        "column": 66
+      },
+      "end": {
+        "line": 36,
+        "column": 104
+      }
+    },
+    "uid-22": {
+      "start": {
+        "line": 36,
+        "column": 104
+      },
+      "end": {
+        "line": 36,
+        "column": 141
+      }
+    },
+    "uid-23": {
+      "start": {
+        "line": 36,
+        "column": 141
+      },
+      "end": {
+        "line": 36,
+        "column": 179
+      }
+    },
+    "uid-24": {
+      "start": {
+        "line": 36,
+        "column": 179
+      },
+      "end": {
+        "line": 36,
+        "column": 216
+      }
+    },
+    "uid-25": {
+      "start": {
+        "line": 37,
+        "column": 4
+      },
+      "end": {
+        "line": 37,
+        "column": 228
+      }
+    },
+    "uid-26": {
+      "start": {
+        "line": 37,
+        "column": 27
+      },
+      "end": {
+        "line": 37,
+        "column": 66
+      }
+    },
+    "uid-27": {
+      "start": {
+        "line": 37,
+        "column": 66
+      },
+      "end": {
+        "line": 37,
+        "column": 104
+      }
+    },
+    "uid-28": {
+      "start": {
+        "line": 37,
+        "column": 104
+      },
+      "end": {
+        "line": 37,
+        "column": 141
+      }
+    },
+    "uid-29": {
+      "start": {
+        "line": 37,
+        "column": 141
+      },
+      "end": {
+        "line": 37,
+        "column": 179
+      }
+    },
+    "uid-30": {
+      "start": {
+        "line": 37,
+        "column": 179
+      },
+      "end": {
+        "line": 37,
+        "column": 216
+      }
+    },
+    "uid-31": {
+      "start": {
+        "line": 38,
+        "column": 4
+      },
+      "end": {
+        "line": 38,
+        "column": 228
+      }
+    },
+    "uid-32": {
+      "start": {
+        "line": 38,
+        "column": 27
+      },
+      "end": {
+        "line": 38,
+        "column": 66
+      }
+    },
+    "uid-33": {
+      "start": {
+        "line": 38,
+        "column": 66
+      },
+      "end": {
+        "line": 38,
+        "column": 104
+      }
+    },
+    "uid-34": {
+      "start": {
+        "line": 38,
+        "column": 104
+      },
+      "end": {
+        "line": 38,
+        "column": 141
+      }
+    },
+    "uid-35": {
+      "start": {
+        "line": 38,
+        "column": 141
+      },
+      "end": {
+        "line": 38,
+        "column": 179
+      }
+    },
+    "uid-36": {
+      "start": {
+        "line": 38,
+        "column": 179
+      },
+      "end": {
+        "line": 38,
+        "column": 216
+      }
+    },
+    "uid-37": {
+      "start": {
+        "line": 39,
+        "column": 4
+      },
+      "end": {
+        "line": 39,
+        "column": 228
+      }
+    },
+    "uid-38": {
+      "start": {
+        "line": 39,
+        "column": 27
+      },
+      "end": {
+        "line": 39,
+        "column": 66
+      }
+    },
+    "uid-39": {
+      "start": {
+        "line": 39,
+        "column": 66
+      },
+      "end": {
+        "line": 39,
+        "column": 104
+      }
+    },
+    "uid-40": {
+      "start": {
+        "line": 39,
+        "column": 104
+      },
+      "end": {
+        "line": 39,
+        "column": 141
+      }
+    },
+    "uid-41": {
+      "start": {
+        "line": 39,
+        "column": 141
+      },
+      "end": {
+        "line": 39,
+        "column": 179
+      }
+    },
+    "uid-42": {
+      "start": {
+        "line": 39,
+        "column": 179
+      },
+      "end": {
+        "line": 39,
+        "column": 216
+      }
+    },
+    "uid-43": {
+      "start": {
+        "line": 40,
+        "column": 4
+      },
+      "end": {
+        "line": 40,
+        "column": 228
+      }
+    },
+    "uid-44": {
+      "start": {
+        "line": 40,
+        "column": 27
+      },
+      "end": {
+        "line": 40,
+        "column": 66
+      }
+    },
+    "uid-45": {
+      "start": {
+        "line": 40,
+        "column": 66
+      },
+      "end": {
+        "line": 40,
+        "column": 104
+      }
+    },
+    "uid-46": {
+      "start": {
+        "line": 40,
+        "column": 104
+      },
+      "end": {
+        "line": 40,
+        "column": 141
+      }
+    },
+    "uid-47": {
+      "start": {
+        "line": 40,
+        "column": 141
+      },
+      "end": {
+        "line": 40,
+        "column": 179
+      }
+    },
+    "uid-48": {
+      "start": {
+        "line": 40,
+        "column": 179
+      },
+      "end": {
+        "line": 40,
+        "column": 216
+      }
+    },
+    "uid-49": {
+      "start": {
+        "line": 41,
+        "column": 4
+      },
+      "end": {
+        "line": 41,
+        "column": 228
+      }
+    },
+    "uid-50": {
+      "start": {
+        "line": 41,
+        "column": 27
+      },
+      "end": {
+        "line": 41,
+        "column": 66
+      }
+    },
+    "uid-51": {
+      "start": {
+        "line": 41,
+        "column": 66
+      },
+      "end": {
+        "line": 41,
+        "column": 104
+      }
+    },
+    "uid-52": {
+      "start": {
+        "line": 41,
+        "column": 104
+      },
+      "end": {
+        "line": 41,
+        "column": 141
+      }
+    },
+    "uid-53": {
+      "start": {
+        "line": 41,
+        "column": 141
+      },
+      "end": {
+        "line": 41,
+        "column": 179
+      }
+    },
+    "uid-54": {
+      "start": {
+        "line": 41,
+        "column": 179
+      },
+      "end": {
+        "line": 41,
+        "column": 216
+      }
+    },
+    "uid-55": {
+      "start": {
+        "line": 42,
+        "column": 4
+      },
+      "end": {
+        "line": 42,
+        "column": 228
+      }
+    },
+    "uid-56": {
+      "start": {
+        "line": 42,
+        "column": 27
+      },
+      "end": {
+        "line": 42,
+        "column": 66
+      }
+    },
+    "uid-57": {
+      "start": {
+        "line": 42,
+        "column": 66
+      },
+      "end": {
+        "line": 42,
+        "column": 104
+      }
+    },
+    "uid-58": {
+      "start": {
+        "line": 42,
+        "column": 104
+      },
+      "end": {
+        "line": 42,
+        "column": 141
+      }
+    },
+    "uid-59": {
+      "start": {
+        "line": 42,
+        "column": 141
+      },
+      "end": {
+        "line": 42,
+        "column": 179
+      }
+    },
+    "uid-60": {
+      "start": {
+        "line": 42,
+        "column": 179
+      },
+      "end": {
+        "line": 42,
+        "column": 216
+      }
+    },
+    "uid-61": {
+      "start": {
+        "line": 43,
+        "column": 4
+      },
+      "end": {
+        "line": 43,
+        "column": 39
+      }
+    },
+    "uid-62": {
+      "start": {
+        "line": 44,
+        "column": 4
+      },
+      "end": {
+        "line": 44,
+        "column": 61
+      }
+    },
+    "uid-63": {
+      "start": {
+        "line": 45,
+        "column": 4
+      },
+      "end": {
+        "line": 45,
+        "column": 63
+      }
+    },
+    "uid-64": {
+      "start": {
+        "line": 46,
+        "column": 4
+      },
+      "end": {
+        "line": 46,
+        "column": 86
+      }
+    },
+    "uid-65": {
+      "start": {
+        "line": 46,
+        "column": 41
+      },
+      "end": {
+        "line": 46,
+        "column": 74
+      }
+    }
+  }
+}

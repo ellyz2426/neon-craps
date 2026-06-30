@@ -1,26 +1,31 @@
 <container flexDirection="column" gap="3" padding="8">
   <text fontSize="18" fontWeight="bold" color="#aaaaaa">HELP</text>
   <text fontSize="10" color="#00ffff">-- Browser Controls --</text>
-  <text fontSize="9" color="#cccccc">Click: Place bet on table</text>
+  <text fontSize="9" color="#cccccc">Click table: Place bet on zone</text>
   <text fontSize="9" color="#cccccc">1-5: Select chip ($1/$5/$10/$25/$100)</text>
   <text fontSize="9" color="#cccccc">Space: Roll dice</text>
+  <text fontSize="9" color="#cccccc">Enter: Continue from result</text>
   <text fontSize="9" color="#cccccc">C: Clear all bets</text>
   <text fontSize="9" color="#cccccc">R: Repeat last bets</text>
+  <text fontSize="9" color="#cccccc">A: Toggle auto-roll</text>
   <text fontSize="9" color="#cccccc">ESC/P: Pause</text>
   <text fontSize="10" color="#00ffff">-- VR Controls --</text>
-  <text fontSize="9" color="#cccccc">Trigger: Place bet / Roll</text>
-  <text fontSize="9" color="#cccccc">Grip: Change chip size</text>
-  <text fontSize="9" color="#cccccc">B: Pause</text>
+  <text fontSize="9" color="#cccccc">R.Trigger: Roll / Continue</text>
+  <text fontSize="9" color="#cccccc">R.Squeeze: Cycle chip size</text>
+  <text fontSize="9" color="#cccccc">R.A: Pause/Resume</text>
+  <text fontSize="9" color="#cccccc">L.Trigger: Place Pass bet</text>
+  <text fontSize="9" color="#cccccc">L.Squeeze: Cycle quick bets</text>
   <text fontSize="10" color="#ffff00">-- Craps Rules --</text>
   <text fontSize="9" color="#cccccc">Come-Out: 7/11 wins, 2/3/12 loses</text>
-  <text fontSize="9" color="#cccccc">Point: Roll point before 7 to win</text>
-  <text fontSize="9" color="#cccccc">Pass Line pays 1:1</text>
-  <text fontSize="9" color="#cccccc">Field pays 1:1 (2x on 2, 3x on 12)</text>
-  <text fontSize="9" color="#cccccc">Place 6/8: 7:6, Place 5/9: 7:5</text>
-  <text fontSize="9" color="#cccccc">Place 4/10: 9:5</text>
+  <text fontSize="9" color="#cccccc">Any other = Point is set</text>
+  <text fontSize="9" color="#cccccc">Point: Roll your point before 7 wins</text>
+  <text fontSize="9" color="#cccccc">Pass Line: 1:1 | Don't Pass: 1:1</text>
+  <text fontSize="9" color="#cccccc">Field: 1:1 (2x on 2, 3x on 12)</text>
+  <text fontSize="9" color="#cccccc">Place 6/8: 7:6, 5/9: 7:5, 4/10: 9:5</text>
   <text fontSize="9" color="#cccccc">Hard 6/8: 9:1, Hard 4/10: 7:1</text>
   <text fontSize="9" color="#cccccc">Any 7: 4:1, Any Craps: 7:1</text>
   <text fontSize="9" color="#cccccc">Yo 11: 15:1, Aces/12: 30:1</text>
+  <text fontSize="9" color="#cccccc">Odds: True odds (0% house edge)</text>
   <container height="4"></container>
   <text name="btn-back" fontSize="14" color="#ff4444" backgroundColor="#330000" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">BACK</text>
 </container>

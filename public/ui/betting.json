@@ -488,6 +488,66 @@
             "sourceTag": "text",
             "type": "custom",
             "children": [
+              "x2"
+            ],
+            "properties": {
+              "name": "btn-double",
+              "fontsize": "9",
+              "color": "#ffff44",
+              "backgroundcolor": "#333300",
+              "padding": "2",
+              "paddingleft": "5",
+              "paddingright": "5",
+              "borderradius": "3",
+              "cursor": "pointer",
+              "hoverBackgroundcolor": "#555500"
+            },
+            "dataUid": "uid-29"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Half"
+            ],
+            "properties": {
+              "name": "btn-half",
+              "fontsize": "9",
+              "color": "#aaffaa",
+              "backgroundcolor": "#002200",
+              "padding": "2",
+              "paddingleft": "5",
+              "paddingright": "5",
+              "borderradius": "3",
+              "cursor": "pointer",
+              "hoverBackgroundcolor": "#004400"
+            },
+            "dataUid": "uid-30"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Max"
+            ],
+            "properties": {
+              "name": "btn-maxbet",
+              "fontsize": "9",
+              "color": "#ff8888",
+              "backgroundcolor": "#330000",
+              "padding": "2",
+              "paddingleft": "5",
+              "paddingright": "5",
+              "borderradius": "3",
+              "cursor": "pointer",
+              "hoverBackgroundcolor": "#550000"
+            },
+            "dataUid": "uid-31"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
               "--"
             ],
             "properties": {
@@ -496,7 +556,7 @@
               "color": "#666666",
               "padding": "2"
             },
-            "dataUid": "uid-29"
+            "dataUid": "uid-32"
           }
         ],
         "properties": {
@@ -528,7 +588,7 @@
               "cursor": "pointer",
               "hoverBackgroundcolor": "#006600"
             },
-            "dataUid": "uid-31"
+            "dataUid": "uid-34"
           },
           {
             "sourceTag": "text",
@@ -548,14 +608,14 @@
               "cursor": "pointer",
               "hoverBackgroundcolor": "#550000"
             },
-            "dataUid": "uid-32"
+            "dataUid": "uid-35"
           }
         ],
         "properties": {
           "flexdirection": "row",
           "gap": "6"
         },
-        "dataUid": "uid-30"
+        "dataUid": "uid-33"
       }
     ],
     "properties": {
@@ -577,7 +637,7 @@
         "column": 0
       },
       "end": {
-        "line": 38,
+        "line": 41,
         "column": 12
       }
     },
@@ -827,7 +887,7 @@
         "column": 2
       },
       "end": {
-        "line": 33,
+        "line": 36,
         "column": 14
       }
     },
@@ -858,36 +918,66 @@
       },
       "end": {
         "line": 32,
-        "column": 82
+        "column": 203
       }
     },
     "uid-30": {
       "start": {
-        "line": 34,
-        "column": 2
+        "line": 33,
+        "column": 4
       },
       "end": {
-        "line": 37,
-        "column": 14
+        "line": 33,
+        "column": 203
       }
     },
     "uid-31": {
       "start": {
-        "line": 35,
+        "line": 34,
         "column": 4
       },
       "end": {
-        "line": 35,
-        "column": 229
+        "line": 34,
+        "column": 204
       }
     },
     "uid-32": {
       "start": {
-        "line": 36,
+        "line": 35,
         "column": 4
       },
       "end": {
-        "line": 36,
+        "line": 35,
+        "column": 82
+      }
+    },
+    "uid-33": {
+      "start": {
+        "line": 37,
+        "column": 2
+      },
+      "end": {
+        "line": 40,
+        "column": 14
+      }
+    },
+    "uid-34": {
+      "start": {
+        "line": 38,
+        "column": 4
+      },
+      "end": {
+        "line": 38,
+        "column": 229
+      }
+    },
+    "uid-35": {
+      "start": {
+        "line": 39,
+        "column": 4
+      },
+      "end": {
+        "line": 39,
         "column": 208
       }
     }

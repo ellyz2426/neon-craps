@@ -1,0 +1,9 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8" backgroundColor="#001122" backgroundOpacity="0.85" borderRadius="4">
+  <text fontSize="14" fontWeight="bold" color="#ffaa00">TUTORIAL</text>
+  <text name="tutorial-text" fontSize="11" color="#ffffff" maxWidth="320">Welcome! Place a PASS LINE bet to start.</text>
+  <text name="tutorial-step" fontSize="9" color="#888888">Step 1/9</text>
+  <container flexDirection="row" gap="6">
+    <text name="btn-tut-next" fontSize="11" color="#00ffff" backgroundColor="#003333" padding="4" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#005555">Next</text>
+    <text name="btn-tut-skip" fontSize="11" color="#ff4444" backgroundColor="#330000" padding="4" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#550000">Skip Tutorial</text>
+  </container>
+</container>

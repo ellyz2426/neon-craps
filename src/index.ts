@@ -44,7 +44,7 @@ import {
 // ============================================================
 // GAME CONSTANTS & TYPES
 // ============================================================
-type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts' | 'strategy' | 'analytics' | 'vip';
+type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts' | 'strategy' | 'analytics' | 'vip' | 'tutorial_overlay';
 type GameMode = 'classic' | 'speed' | 'practice' | 'highroller' | 'daily' | 'session' | 'marathon' | 'tutorial';
 type CrapsPhase = 'comeout' | 'point';
 type BetType = 'pass' | 'dontpass' | 'come' | 'dontcome' | 'field' | 'place4' | 'place5' | 'place6' | 'place8' | 'place9' | 'place10' | 'hard4' | 'hard6' | 'hard8' | 'hard10' | 'anyseven' | 'anycraps' | 'yo' | 'aces' | 'boxcars' | 'odds_pass' | 'odds_dontpass' | 'big6' | 'big8';
@@ -141,6 +141,27 @@ class GameStateManager {
   betAnalytics: Map<BetType, BetAnalytics> = new Map();
   uniqueBetsThisSession: Set<string> = new Set();
 
+  // Tutorial state
+  tutorialStep: number = 0;
+  tutorialSteps: string[] = [
+    'Welcome! Craps is a dice game. Place a PASS LINE bet to start.',
+    'Great! Now ROLL the dice (Space or click Roll).',
+    'Come-out roll: 7 or 11 = win, 2/3/12 = lose, other = set point.',
+    'Point is set! Now roll again. Hit the point to win, 7 = lose.',
+    'Try the FIELD bet next — wins on 2,3,4,9,10,11,12!',
+    'PLACE bets win when their number hits before a 7.',
+    'HARDWAY bets pay big when both dice show the same value.',
+    'Use strategy PRESETS for one-click betting setups.',
+    'You\'re ready! Switch to Classic mode for the full experience.',
+  ];
+
+  // Session bankroll history (for trend tracking)
+  bankrollHistory: number[] = [];
+  bankrollHistoryInterval: number = 0;
+
+  // Croupier streak announcements
+  lastStreakAnnounce: number = 0;
+
   // Career stats (persisted)
   career = {
     games: 0, totalRolls: 0, totalWon: 0, totalLost: 0,
@@ -149,6 +170,8 @@ class GameStateManager {
     propWins: 0, comeWins: 0, lowestBank: 99999,
     ironCrossWins: 0, darkSideWins: 0, presetsUsed: 0,
     compPoints: 0, totalWagered: 0, vipLevel: 0,
+    chipDenoms: [] as number[], dailyCompletions: 0,
+    tableBetsPlaced: 0, maxBetUsed: false,
   };
 
   constructor() {
@@ -248,6 +271,27 @@ class GameStateManager {
       { id: 'marathon_100', name: 'Century', desc: '100 rolls in one game', unlocked: false },
       { id: 'level_100', name: 'Grandmaster', desc: 'Reach level 100', unlocked: false },
       { id: 'profit_10k', name: 'Ten Grand', desc: 'Net profit of $10000 in one session', unlocked: false },
+      // ── Round 5 achievements (90-109) ──
+      { id: 'table_clicker', name: 'Table Tap', desc: 'Place a bet by clicking the table', unlocked: false },
+      { id: 'multi_bet_5', name: 'Spread Bettor', desc: 'Have 5 active bets at once', unlocked: false },
+      { id: 'bankroll_100k', name: 'Millionaire Path', desc: 'Reach $100000 bankroll', unlocked: false },
+      { id: 'tutorial_done', name: 'Graduate', desc: 'Complete the tutorial', unlocked: false },
+      { id: 'yo_streak', name: 'Yo Yo Yo', desc: 'Roll 11 twice in a row', unlocked: false },
+      { id: 'double_odds', name: 'Double Down', desc: 'Use the x2 bet multiplier', unlocked: false },
+      { id: 'max_bettor', name: 'Maximum Force', desc: 'Use the Max Bet button', unlocked: false },
+      { id: 'night_roller', name: 'Night Owl', desc: 'Play between midnight and 5am', unlocked: false },
+      { id: 'come_points_3', name: 'Triple Come', desc: 'Have 3 come points active', unlocked: false },
+      { id: 'dc_points_3', name: 'Triple Don\'t', desc: 'Have 3 don\'t come points active', unlocked: false },
+      { id: 'hardway_instant', name: 'Hard and Fast', desc: 'Hit a hardway on the first roll', unlocked: false },
+      { id: 'bankroll_recover', name: 'Phoenix', desc: 'Recover from below $50 to above $500', unlocked: false },
+      { id: 'no_lose_20', name: 'Teflon', desc: '20 rolls without losing any bet', unlocked: false },
+      { id: 'seven_out_3', name: 'Persistent', desc: 'Seven out 3 times and keep playing', unlocked: false },
+      { id: 'natural_streak', name: 'Natural Born', desc: 'Roll 2 naturals in a row', unlocked: false },
+      { id: 'place_all', name: 'Full Board', desc: 'Have all 6 place numbers covered', unlocked: false },
+      { id: 'chip_variety', name: 'Chip Collector', desc: 'Use all 5 chip denominations', unlocked: false },
+      { id: 'daily_streak_3', name: 'Daily Grind', desc: 'Complete 3 daily challenges', unlocked: false },
+      { id: 'session_60m', name: 'All-Nighter', desc: 'Play for 60 minutes', unlocked: false },
+      { id: 'profit_25k', name: 'Quarter Million', desc: 'Net profit of $25000 in one session', unlocked: false },
     ];
   }
 
@@ -362,6 +406,10 @@ class GameStateManager {
     this.numberCounts.clear();
     this.comePoints.clear();
     this.dontComePoints.clear();
+    this.bankrollHistory = [startBank];
+    this.bankrollHistoryInterval = 0;
+    this.tutorialStep = 0;
+    this.lastStreakAnnounce = 0;
     this.save();
   }
 }
@@ -931,8 +979,83 @@ function processRoll(roll: RollResult) {
   // Ten Grand net profit
   if (GM.bankroll - GM.startBankroll >= 10000) { if (GM.unlock('profit_10k')) GM.toastQueue.push('Achievement: Ten Grand!'); }
 
+  // ── Round 5 achievement checks ──
+  // Multi-bet check
+  if (GM.bets.length >= 5) { if (GM.unlock('multi_bet_5')) GM.toastQueue.push('Achievement: Spread Bettor!'); }
+  // Bankroll 100k
+  if (GM.bankroll >= 100000) { if (GM.unlock('bankroll_100k')) GM.toastQueue.push('Achievement: Millionaire Path!'); }
+  // Yo streak — two 11s in a row
+  if (GM.rollHistory.length >= 2 && GM.rollHistory[0].total === 11 && GM.rollHistory[1].total === 11) {
+    if (GM.unlock('yo_streak')) GM.toastQueue.push('Achievement: Yo Yo Yo!');
+  }
+  // Night owl — check current hour
+  const nowHour = new Date().getHours();
+  if (nowHour >= 0 && nowHour < 5) { if (GM.unlock('night_roller')) GM.toastQueue.push('Achievement: Night Owl!'); }
+  // Come points 3
+  if (GM.comePoints.size >= 3) { if (GM.unlock('come_points_3')) GM.toastQueue.push('Achievement: Triple Come!'); }
+  // Don't come points 3
+  if (GM.dontComePoints.size >= 3) { if (GM.unlock('dc_points_3')) GM.toastQueue.push('Achievement: Triple Don\'t!'); }
+  // Hardway on first roll of session
+  if (GM.rollCount === 1 && isHard && [4, 6, 8, 10].includes(total)) {
+    if (GM.unlock('hardway_instant')) GM.toastQueue.push('Achievement: Hard and Fast!');
+  }
+  // Phoenix — recover from <50 to >500
+  if (GM.career.lowestBank < 50 && GM.bankroll >= 500) {
+    if (GM.unlock('bankroll_recover')) GM.toastQueue.push('Achievement: Phoenix!');
+  }
+  // Seven out 3 check
+  if (GM.sevenOuts >= 3 && GM.bankroll > 0) {
+    if (GM.unlock('seven_out_3')) GM.toastQueue.push('Achievement: Persistent!');
+  }
+  // Natural streak — 2 naturals in a row
+  if (GM.rollHistory.length >= 2) {
+    const r1 = GM.rollHistory[0].total;
+    const r2 = GM.rollHistory[1].total;
+    if ((r1 === 7 || r1 === 11) && (r2 === 7 || r2 === 11) && GM.phase === 'comeout') {
+      if (GM.unlock('natural_streak')) GM.toastQueue.push('Achievement: Natural Born!');
+    }
+  }
+  // Full board — all 6 place numbers
+  const placeActive = ['place4', 'place5', 'place6', 'place8', 'place9', 'place10'].every(
+    p => GM.bets.some(b => b.type === p)
+  );
+  if (placeActive) { if (GM.unlock('place_all')) GM.toastQueue.push('Achievement: Full Board!'); }
+  // Chip variety
+  if (chipDenomsUsed.size >= 5) { if (GM.unlock('chip_variety')) GM.toastQueue.push('Achievement: Chip Collector!'); }
+  // Profit 25k
+  if (GM.bankroll - GM.startBankroll >= 25000) { if (GM.unlock('profit_25k')) GM.toastQueue.push('Achievement: Quarter Million!'); }
+
+  // Track bankroll history
+  trackBankrollHistory();
+
   // XP
   GM.addXp(Math.floor(result.totalPayout / 10) + 5);
+
+  // Tutorial auto-advance on roll
+  if (GM.mode === 'tutorial') {
+    if (GM.tutorialStep === 1) { GM.tutorialStep = 2; updateTutorialPanel(); } // After first roll
+    if (GM.tutorialStep === 2 && (total === 7 || total === 11 || total === 2 || total === 3 || total === 12)) {
+      GM.tutorialStep = 3; updateTutorialPanel();
+    }
+    if (GM.tutorialStep === 2 && GM.phase === 'point') {
+      GM.tutorialStep = 3; updateTutorialPanel();
+    }
+    if (GM.tutorialStep === 3 && (GM.phase === 'comeout' && GM.rollCount > 2)) {
+      GM.tutorialStep = 4; updateTutorialPanel();
+    }
+  }
+
+  // Daily completion tracking
+  if (GM.mode === 'daily' && (GM.bankroll <= 0 || GM.bankroll >= GM.sessionGoal)) {
+    GM.career.dailyCompletions++;
+    if (GM.career.dailyCompletions >= 3) {
+      if (GM.unlock('daily_streak_3')) GM.toastQueue.push('Achievement: Daily Grind!');
+    }
+  }
+
+  // Session time check for 60-minute achievement
+  const sessionMins2 = Math.floor((Date.now() - GM.sessionStart) / 60000);
+  if (sessionMins2 >= 60) GM.unlock('session_60m');
 
   // Play sound
   if (result.totalPayout > 0) audio.playSfx('win');
@@ -970,6 +1093,9 @@ const CHIP_COLORS: Record<number, number> = { 1: 0xffffff, 5: 0xff4444, 10: 0x44
 
 // Bet zone highlight meshes
 const betZoneHighlights: Map<BetType, Mesh> = new Map();
+
+// Click-to-bet: track chip denominations used
+const chipDenomsUsed = new Set<number>();
 
 // Panel entities for show/hide
 const panelEntities: Map<string, Entity> = new Map();
@@ -1513,6 +1639,11 @@ function updateDicePhysics(delta: number) {
       d.velocity.set(0, 0, 0);
       d.angVel.set(0, 0, 0);
       d.mesh.position.y = TABLE_Y + 0.06;
+      // Snap to nearest face alignment for clean look
+      const snapAngle = (a: number) => Math.round(a / (Math.PI / 2)) * (Math.PI / 2);
+      d.mesh.rotation.x = snapAngle(d.mesh.rotation.x);
+      d.mesh.rotation.y = snapAngle(d.mesh.rotation.y);
+      d.mesh.rotation.z = snapAngle(d.mesh.rotation.z);
       audio.playSfx('dice_settle');
     } else {
       allSettled = false;
@@ -1623,6 +1754,22 @@ function updateGameOverPanel() {
   setText(e, 'final-net', `Net: ${net >= 0 ? '+' : ''}$${net}`);
   const roi = GM.startBankroll > 0 ? Math.round((net / GM.startBankroll) * 100) : 0;
   setText(e, 'final-roi', `ROI: ${roi >= 0 ? '+' : ''}${roi}%`);
+  // Bankroll trend
+  if (GM.bankrollHistory.length >= 2) {
+    const first = GM.bankrollHistory[0];
+    const last = GM.bankrollHistory[GM.bankrollHistory.length - 1];
+    const peak = Math.max(...GM.bankrollHistory);
+    const valley = Math.min(...GM.bankrollHistory);
+    const trendDir = last > first ? 'Up' : last < first ? 'Down' : 'Flat';
+    setText(e, 'final-trend', `Trend: ${trendDir} | Peak: $${peak} | Low: $${valley}`);
+  } else {
+    setText(e, 'final-trend', 'Trend: --');
+  }
+  // Total bets placed
+  const totalBetsPlaced = Array.from(GM.betAnalytics.values()).reduce((s, a) => s + a.placed, 0);
+  setText(e, 'final-bets-placed', `Bets Placed: ${totalBetsPlaced}`);
+  // Best single roll payout
+  setText(e, 'final-best-roll', `Points Made: ${GM.pointsMade} | Naturals: ${GM.naturals}`);
 }
 
 function updateHUD() {
@@ -1879,6 +2026,28 @@ function updateSettingsPanel() {
   setText(e, 'theme-name', THEMES[GM.currentTheme].name);
 }
 
+function updateTutorialPanel() {
+  const e = panelEntities.get('tutorial_overlay');
+  if (!e) return;
+  if (GM.tutorialStep < GM.tutorialSteps.length) {
+    setText(e, 'tutorial-text', GM.tutorialSteps[GM.tutorialStep]);
+    setText(e, 'tutorial-step', `Step ${GM.tutorialStep + 1}/${GM.tutorialSteps.length}`);
+  } else {
+    setText(e, 'tutorial-text', 'Tutorial complete! You\'re a craps pro now.');
+    setText(e, 'tutorial-step', 'Done!');
+    if (GM.unlock('tutorial_done')) GM.toastQueue.push('Achievement: Graduate!');
+  }
+}
+
+function trackBankrollHistory() {
+  GM.bankrollHistoryInterval++;
+  if (GM.bankrollHistoryInterval >= 3) { // Track every 3 rolls
+    GM.bankrollHistoryInterval = 0;
+    GM.bankrollHistory.push(GM.bankroll);
+    if (GM.bankrollHistory.length > 50) GM.bankrollHistory.shift();
+  }
+}
+
 function startGame() {
   let startBank = 1000;
   if (GM.difficulty === 0) startBank = 1000;
@@ -1934,6 +2103,7 @@ function updatePanelVisibility() {
     analytics: s === 'analytics',
     vip: s === 'vip',
     dealer: gameplay && GM.dealerTimer > 0,
+    tutorial_overlay: gameplay && GM.mode === 'tutorial' && GM.tutorialStep < GM.tutorialSteps.length,
   };
   panelEntities.forEach((e, name) => {
     const shouldShow = vis[name] || false;
@@ -1981,6 +2151,7 @@ class CrapsUISystem extends createSystem({
   analytics: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/analytics.json')] },
   vip: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/vip.json')] },
   dealer: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/dealer.json')] },
+  tutorial_overlay: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/tutorial.json')] },
 }) {
   init() {
     const wire = (doc: UIKitDocument, id: string, fn: () => void) => {
@@ -2035,11 +2206,11 @@ class CrapsUISystem extends createSystem({
     // ── Betting ──
     this.queries.betting.subscribe('qualify', (entity: Entity) => {
       const doc = getDoc(entity); if (!doc) return;
-      wire(doc, 'btn-chip1', () => { audio.playSfx('chip_select'); GM.chipSize = 1; });
-      wire(doc, 'btn-chip5', () => { audio.playSfx('chip_select'); GM.chipSize = 5; });
-      wire(doc, 'btn-chip10', () => { audio.playSfx('chip_select'); GM.chipSize = 10; });
-      wire(doc, 'btn-chip25', () => { audio.playSfx('chip_select'); GM.chipSize = 25; });
-      wire(doc, 'btn-chip100', () => { audio.playSfx('chip_select'); GM.chipSize = 100; });
+      wire(doc, 'btn-chip1', () => { audio.playSfx('chip_select'); GM.chipSize = 1; chipDenomsUsed.add(1); });
+      wire(doc, 'btn-chip5', () => { audio.playSfx('chip_select'); GM.chipSize = 5; chipDenomsUsed.add(5); });
+      wire(doc, 'btn-chip10', () => { audio.playSfx('chip_select'); GM.chipSize = 10; chipDenomsUsed.add(10); });
+      wire(doc, 'btn-chip25', () => { audio.playSfx('chip_select'); GM.chipSize = 25; chipDenomsUsed.add(25); });
+      wire(doc, 'btn-chip100', () => { audio.playSfx('chip_select'); GM.chipSize = 100; chipDenomsUsed.add(100); });
       wire(doc, 'btn-pass', () => { audio.playSfx('bet_place'); GM.addBet('pass', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
       wire(doc, 'btn-dontpass', () => { audio.playSfx('bet_place'); GM.addBet('dontpass', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
       wire(doc, 'btn-field', () => { audio.playSfx('bet_place'); GM.addBet('field', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
@@ -2101,6 +2272,48 @@ class CrapsUISystem extends createSystem({
         const ae = panelEntities.get('betting');
         if (ae) setText(ae, 'autoroll-label', GM.autoRoll ? 'Auto: ON' : 'Auto: OFF');
         GM.toastQueue.push(GM.autoRoll ? 'Auto-Roll ON' : 'Auto-Roll OFF');
+      });
+      // Bet multiplier buttons
+      wire(doc, 'btn-double', () => {
+        if (GM.bets.length === 0) return;
+        audio.playSfx('bet_place');
+        const maxBet = VIP_LEVELS[Math.min(GM.career.vipLevel, VIP_LEVELS.length - 1)].maxBet;
+        for (const bet of GM.bets) {
+          const addAmount = Math.min(bet.amount, maxBet - bet.amount, GM.bankroll - GM.getTotalBet());
+          if (addAmount > 0) bet.amount += addAmount;
+        }
+        if (GM.unlock('double_odds')) GM.toastQueue.push('Achievement: Double Down!');
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      });
+      wire(doc, 'btn-half', () => {
+        if (GM.bets.length === 0) return;
+        audio.playSfx('chip_select');
+        for (const bet of GM.bets) {
+          bet.amount = Math.max(1, Math.floor(bet.amount / 2));
+        }
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      });
+      wire(doc, 'btn-maxbet', () => {
+        if (GM.bets.length === 0) {
+          // If no bets, place max on pass line
+          const maxBet = VIP_LEVELS[Math.min(GM.career.vipLevel, VIP_LEVELS.length - 1)].maxBet;
+          const amount = Math.min(maxBet, GM.bankroll);
+          if (amount > 0) {
+            audio.playSfx('bet_place');
+            GM.addBet('pass', amount);
+          }
+        } else {
+          // Max out all existing bets
+          audio.playSfx('bet_place');
+          const maxBet = VIP_LEVELS[Math.min(GM.career.vipLevel, VIP_LEVELS.length - 1)].maxBet;
+          for (const bet of GM.bets) {
+            const addAmount = Math.min(maxBet - bet.amount, GM.bankroll - GM.getTotalBet());
+            if (addAmount > 0) bet.amount += addAmount;
+          }
+        }
+        GM.career.maxBetUsed = true;
+        if (GM.unlock('max_bettor')) GM.toastQueue.push('Achievement: Maximum Force!');
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
       });
     });
 
@@ -2201,6 +2414,24 @@ class CrapsUISystem extends createSystem({
     });
 
     // ── Dealer — no buttons ──
+
+    // ── Tutorial ──
+    this.queries.tutorial_overlay.subscribe('qualify', (entity: Entity) => {
+      const doc = getDoc(entity); if (!doc) return;
+      wire(doc, 'btn-tut-next', () => {
+        audio.playSfx('click');
+        GM.tutorialStep++;
+        updateTutorialPanel();
+        if (GM.tutorialStep >= GM.tutorialSteps.length) {
+          if (GM.unlock('tutorial_done')) GM.toastQueue.push('Achievement: Graduate!');
+        }
+      });
+      wire(doc, 'btn-tut-skip', () => {
+        audio.playSfx('click');
+        GM.tutorialStep = GM.tutorialSteps.length;
+        updateTutorialPanel();
+      });
+    });
 
     // ── Hot/Cold — no buttons needed ──
   }
@@ -2489,6 +2720,7 @@ async function main() {
     { name: 'analytics', config: './ui/analytics.json', follower: false },
     { name: 'vip', config: './ui/vip.json', follower: false },
     { name: 'dealer', config: './ui/dealer.json', follower: true, ox: 0, oy: 0.15, oz: -1.0 },
+    { name: 'tutorial_overlay', config: './ui/tutorial.json', follower: true, ox: 0.4, oy: 0.1, oz: -1.0 },
   ];
 
   panelConfigs.filter(p => p.follower).forEach(p => followerNames.add(p.name));
@@ -2527,11 +2759,11 @@ async function main() {
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && GM.state === 'betting') { e.preventDefault(); throwDice(); }
     if (e.code === 'Enter' && GM.state === 'result') { GM.state = 'betting'; updateHUD(); updateBetsPanel(); updateHistoryPanel(); }
-    if (e.code === 'Digit1') { GM.chipSize = 1; audio.playSfx('chip_select'); }
-    if (e.code === 'Digit2') { GM.chipSize = 5; audio.playSfx('chip_select'); }
-    if (e.code === 'Digit3') { GM.chipSize = 10; audio.playSfx('chip_select'); }
-    if (e.code === 'Digit4') { GM.chipSize = 25; audio.playSfx('chip_select'); }
-    if (e.code === 'Digit5') { GM.chipSize = 100; audio.playSfx('chip_select'); }
+    if (e.code === 'Digit1') { GM.chipSize = 1; chipDenomsUsed.add(1); audio.playSfx('chip_select'); }
+    if (e.code === 'Digit2') { GM.chipSize = 5; chipDenomsUsed.add(5); audio.playSfx('chip_select'); }
+    if (e.code === 'Digit3') { GM.chipSize = 10; chipDenomsUsed.add(10); audio.playSfx('chip_select'); }
+    if (e.code === 'Digit4') { GM.chipSize = 25; chipDenomsUsed.add(25); audio.playSfx('chip_select'); }
+    if (e.code === 'Digit5') { GM.chipSize = 100; chipDenomsUsed.add(100); audio.playSfx('chip_select'); }
     if (e.code === 'KeyC' && GM.state === 'betting') { audio.playSfx('bet_clear'); GM.clearBets(); updateHUD(); updateBetsPanel(); }
     if (e.code === 'KeyR' && GM.state === 'betting' && GM.lastBets.length > 0) { GM.bets = GM.lastBets.map(b => ({ ...b })); audio.playSfx('bet_place'); updateHUD(); updateBetsPanel(); }
     if (e.code === 'KeyA' && GM.state === 'betting') {
@@ -2546,6 +2778,38 @@ async function main() {
       else if (GM.state !== 'title' && GM.state !== 'rolling' && GM.state !== 'countdown') GM.state = 'title';
     }
   });
+
+  // Click-to-bet on 3D table zones
+  const onTableClick = (event: MouseEvent) => {
+    if (GM.state !== 'betting') return;
+    const rect = container.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, world.camera);
+    const zoneMeshes = betZones.map(z => z.mesh);
+    const hits = raycaster.intersectObjects(zoneMeshes, false);
+    if (hits.length > 0) {
+      const hitMesh = hits[0].object as Mesh;
+      const zone = betZones.find(z => z.mesh === hitMesh);
+      if (zone) {
+        audio.init();
+        audio.playSfx('bet_place');
+        GM.addBet(zone.type, GM.chipSize);
+        GM.career.tableBetsPlaced++;
+        if (GM.unlock('table_clicker')) GM.toastQueue.push('Achievement: Table Tap!');
+        updateHUD();
+        updateBetsPanel();
+        updateAllChipStacks();
+        updateBetZoneHighlights();
+        // Tutorial: advance if step 0 (place first bet)
+        if (GM.mode === 'tutorial' && GM.tutorialStep === 0) {
+          GM.tutorialStep = 1;
+          updateTutorialPanel();
+        }
+      }
+    }
+  };
+  container.addEventListener('click', onTableClick);
 
   // Initial state
   GM.state = 'title';

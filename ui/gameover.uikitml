@@ -17,6 +17,9 @@
   </container>
   <text name="final-net" fontSize="14" fontWeight="bold" color="#ffffff">Net: $0</text>
   <text name="final-roi" fontSize="11" color="#888888">ROI: 0%</text>
+  <text name="final-trend" fontSize="10" color="#666666">Trend: --</text>
+  <text name="final-bets-placed" fontSize="10" color="#555555">Bets Placed: 0</text>
+  <text name="final-best-roll" fontSize="10" color="#555555">Best Roll: --</text>
   <container height="4"></container>
   <text name="btn-rematch" fontSize="16" color="#00ffff" backgroundColor="#003333" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#005555">REMATCH</text>
   <text name="btn-menu" fontSize="14" color="#aaaaaa" backgroundColor="#222222" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">MENU</text>

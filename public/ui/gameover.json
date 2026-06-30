@@ -190,13 +190,52 @@
         "dataUid": "uid-16"
       },
       {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Trend: --"
+        ],
+        "properties": {
+          "name": "final-trend",
+          "fontsize": "10",
+          "color": "#666666"
+        },
+        "dataUid": "uid-17"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Bets Placed: 0"
+        ],
+        "properties": {
+          "name": "final-bets-placed",
+          "fontsize": "10",
+          "color": "#555555"
+        },
+        "dataUid": "uid-18"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Best Roll: --"
+        ],
+        "properties": {
+          "name": "final-best-roll",
+          "fontsize": "10",
+          "color": "#555555"
+        },
+        "dataUid": "uid-19"
+      },
+      {
         "sourceTag": "container",
         "type": "custom",
         "children": [],
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-17"
+        "dataUid": "uid-20"
       },
       {
         "sourceTag": "text",
@@ -216,7 +255,7 @@
           "cursor": "pointer",
           "hoverBackgroundcolor": "#005555"
         },
-        "dataUid": "uid-18"
+        "dataUid": "uid-21"
       },
       {
         "sourceTag": "text",
@@ -236,7 +275,7 @@
           "cursor": "pointer",
           "hoverBackgroundcolor": "#444444"
         },
-        "dataUid": "uid-19"
+        "dataUid": "uid-22"
       }
     ],
     "properties": {
@@ -258,7 +297,7 @@
         "column": 0
       },
       "end": {
-        "line": 22,
+        "line": 25,
         "column": 12
       }
     },
@@ -419,7 +458,7 @@
       },
       "end": {
         "line": 19,
-        "column": 36
+        "column": 73
       }
     },
     "uid-18": {
@@ -429,7 +468,7 @@
       },
       "end": {
         "line": 20,
-        "column": 210
+        "column": 84
       }
     },
     "uid-19": {
@@ -439,6 +478,36 @@
       },
       "end": {
         "line": 21,
+        "column": 81
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 22,
+        "column": 2
+      },
+      "end": {
+        "line": 22,
+        "column": 36
+      }
+    },
+    "uid-21": {
+      "start": {
+        "line": 23,
+        "column": 2
+      },
+      "end": {
+        "line": 23,
+        "column": 210
+      }
+    },
+    "uid-22": {
+      "start": {
+        "line": 24,
+        "column": 2
+      },
+      "end": {
+        "line": 24,
         "column": 204
       }
     }

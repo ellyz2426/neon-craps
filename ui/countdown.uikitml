@@ -1,0 +1,3 @@
+<container flexDirection="column" alignItems="center" padding="8" backgroundColor="#000000" backgroundOpacity="0.8" borderRadius="6">
+  <text name="countdown-text" fontSize="36" fontWeight="bold" color="#00ffff">3</text>
+</container>

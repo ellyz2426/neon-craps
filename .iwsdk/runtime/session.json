@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "6437ad37-93ad-4bc4-bee8-3498adb32bae",
+  "workspaceRoot": "/home/hatch/workspace/neon-craps",
+  "pid": 5796,
+  "port": 5173,
+  "localUrl": "http://localhost:5173/",
+  "networkUrls": [
+    "http://198.19.0.2:5173/"
+  ],
+  "aiMode": "agent",
+  "aiTools": [
+    "claude"
+  ],
+  "browser": {
+    "status": "connected",
+    "connected": true,
+    "connectedClientCount": 1,
+    "lastTransitionAt": "2026-06-30T08:17:56.732Z"
+  },
+  "registeredAt": "2026-06-30T08:15:11.179Z",
+  "updatedAt": "2026-06-30T08:17:56.736Z"
+}

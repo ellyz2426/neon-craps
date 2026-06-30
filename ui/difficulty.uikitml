@@ -1,0 +1,9 @@
+<container flexDirection="column" alignItems="center" gap="6" padding="10">
+  <text fontSize="20" fontWeight="bold" color="#00ffff">DIFFICULTY</text>
+  <container height="4"></container>
+  <text name="btn-easy" fontSize="16" color="#44ff44" backgroundColor="#003300" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#005500">Easy - $1000</text>
+  <text name="btn-medium" fontSize="16" color="#ffaa00" backgroundColor="#332200" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#554400">Medium - $500</text>
+  <text name="btn-hard" fontSize="16" color="#ff4444" backgroundColor="#330000" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">Hard - $250</text>
+  <container height="4"></container>
+  <text name="btn-back" fontSize="14" color="#aaaaaa" backgroundColor="#222222" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">BACK</text>
+</container>

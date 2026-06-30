@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="5" padding="10" backgroundColor="#000000" backgroundOpacity="0.7" borderRadius="6">
+  <text fontSize="22" fontWeight="bold" color="#ff4444">GAME OVER</text>
+  <container height="2"></container>
+  <text name="final-mode" fontSize="11" color="#888888">Classic</text>
+  <text name="final-bankroll" fontSize="16" color="#44ff44">$0</text>
+  <text name="final-rolls" fontSize="12" color="#ffffff">Rolls: 0</text>
+  <text name="final-won" fontSize="12" color="#44ff44">Won: $0</text>
+  <text name="final-lost" fontSize="12" color="#ff4444">Lost: $0</text>
+  <text name="final-streak" fontSize="12" color="#ffaa00">Best Streak: 0</text>
+  <text name="final-sevens" fontSize="12" color="#ff8800">Seven-Outs: 0</text>
+  <container height="4"></container>
+  <text name="btn-rematch" fontSize="16" color="#00ffff" backgroundColor="#003333" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#005555">REMATCH</text>
+  <text name="btn-menu" fontSize="14" color="#aaaaaa" backgroundColor="#222222" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">MENU</text>
+</container>

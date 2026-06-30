@@ -1,0 +1,11 @@
+<container flexDirection="column" gap="3" padding="6" backgroundColor="#000000" backgroundOpacity="0.6" borderRadius="4">
+  <text fontSize="14" fontWeight="bold" color="#ff8800">ACTIVE BETS</text>
+  <text name="bet-1" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-2" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-3" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-4" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-5" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-6" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-7" fontSize="9" color="#cccccc">--</text>
+  <text name="bet-8" fontSize="9" color="#cccccc">--</text>
+</container>

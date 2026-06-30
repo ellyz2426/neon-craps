@@ -1,0 +1,26 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8" backgroundColor="#000000" backgroundOpacity="0.7" borderRadius="4">
+  <text fontSize="16" fontWeight="bold" color="#00ffff">PLACE YOUR BETS</text>
+  <container flexDirection="row" gap="4">
+    <text name="btn-chip1" fontSize="11" color="#ffffff" backgroundColor="#004444" padding="4" paddingLeft="8" paddingRight="8" borderRadius="4" cursor="pointer" hover-backgroundColor="#006666">$1</text>
+    <text name="btn-chip5" fontSize="11" color="#ff4444" backgroundColor="#440000" padding="4" paddingLeft="8" paddingRight="8" borderRadius="4" cursor="pointer" hover-backgroundColor="#660000">$5</text>
+    <text name="btn-chip10" fontSize="11" color="#4444ff" backgroundColor="#000044" padding="4" paddingLeft="8" paddingRight="8" borderRadius="4" cursor="pointer" hover-backgroundColor="#000066">$10</text>
+    <text name="btn-chip25" fontSize="11" color="#44ff44" backgroundColor="#004400" padding="4" paddingLeft="8" paddingRight="8" borderRadius="4" cursor="pointer" hover-backgroundColor="#006600">$25</text>
+    <text name="btn-chip100" fontSize="11" color="#000000" backgroundColor="#888888" padding="4" paddingLeft="8" paddingRight="8" borderRadius="4" cursor="pointer" hover-backgroundColor="#aaaaaa">$100</text>
+  </container>
+  <container flexDirection="row" gap="4">
+    <text name="btn-pass" fontSize="10" color="#44ff44" backgroundColor="#003300" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#005500">Pass</text>
+    <text name="btn-dontpass" fontSize="10" color="#ff4444" backgroundColor="#330000" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#550000">Don't Pass</text>
+    <text name="btn-field" fontSize="10" color="#ffff00" backgroundColor="#333300" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#555500">Field</text>
+    <text name="btn-come" fontSize="10" color="#00ffff" backgroundColor="#003333" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#005555">Come</text>
+  </container>
+  <container flexDirection="row" gap="4">
+    <text name="btn-place" fontSize="10" color="#ff8800" backgroundColor="#332200" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#554400">Place</text>
+    <text name="btn-hard" fontSize="10" color="#ff44ff" backgroundColor="#330033" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#550055">Hardway</text>
+    <text name="btn-prop" fontSize="10" color="#8888ff" backgroundColor="#222244" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#444466">Props</text>
+    <text name="btn-odds" fontSize="10" color="#ffffff" backgroundColor="#333333" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#555555">Odds</text>
+  </container>
+  <container flexDirection="row" gap="6">
+    <text name="btn-roll" fontSize="14" fontWeight="bold" color="#00ff00" backgroundColor="#004400" padding="5" paddingLeft="14" paddingRight="14" borderRadius="4" cursor="pointer" hover-backgroundColor="#006600">ROLL DICE</text>
+    <text name="btn-clear" fontSize="12" color="#ff4444" backgroundColor="#330000" padding="4" paddingLeft="10" paddingRight="10" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">Clear</text>
+  </container>
+</container>

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "workspaceRoot": "/home/hatch/workspace/neon-craps",
+  "pid": 5796,
+  "command": "npm",
+  "args": [
+    "run",
+    "dev:runtime"
+  ],
+  "logPath": "/home/hatch/workspace/neon-craps/.iwsdk/runtime/logs/dev-1782807308226.log",
+  "scriptName": "dev:runtime",
+  "port": 5173,
+  "openBrowser": false,
+  "createdAt": "2026-06-30T08:15:16.310Z"
+}

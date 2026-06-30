@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="3" padding="8">
+  <text fontSize="18" fontWeight="bold" color="#ffff44">DICE SKINS</text>
+  <container height="2"></container>
+  <text name="skin-1" fontSize="10" color="#00ffff" backgroundColor="#003333" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#005555">[*] Neon Cyan</text>
+  <text name="skin-2" fontSize="10" color="#ff8800" backgroundColor="#332200" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#554400">[ ] Solar Flare</text>
+  <text name="skin-3" fontSize="10" color="#ff44ff" backgroundColor="#330033" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#550055">[ ] Plasma Pink</text>
+  <text name="skin-4" fontSize="10" color="#4444ff" backgroundColor="#000044" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#000066">[ ] Frost Blue</text>
+  <text name="skin-5" fontSize="10" color="#44ff44" backgroundColor="#003300" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#005500">[ ] Toxic Green</text>
+  <text name="skin-6" fontSize="10" color="#ffff00" backgroundColor="#333300" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#555500">[ ] Royal Gold</text>
+  <text name="skin-7" fontSize="10" color="#8800ff" backgroundColor="#220044" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#440066">[ ] Void Purple</text>
+  <text name="skin-8" fontSize="10" color="#ff4400" backgroundColor="#331100" padding="3" paddingLeft="10" paddingRight="10" borderRadius="3" cursor="pointer" hover-backgroundColor="#553300">[ ] Inferno</text>
+  <container height="4"></container>
+  <text name="btn-back" fontSize="14" color="#ff4444" backgroundColor="#330000" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">BACK</text>
+</container>

@@ -1,0 +1,17 @@
+<container flexDirection="column" gap="3" padding="6" backgroundColor="#000000" backgroundOpacity="0.6" borderRadius="4">
+  <container flexDirection="row" gap="8">
+    <text name="bankroll" fontSize="12" color="#44ff44">$1000</text>
+    <text name="point-display" fontSize="12" color="#ffff00">Point: OFF</text>
+    <text name="phase" fontSize="12" color="#00ffff">Come-Out</text>
+  </container>
+  <container flexDirection="row" gap="8">
+    <text name="last-roll" fontSize="14" fontWeight="bold" color="#ffffff">Last: --</text>
+    <text name="total-bet" fontSize="12" color="#ff8800">Bet: $0</text>
+    <text name="mode-label" fontSize="10" color="#888888">Classic</text>
+  </container>
+  <container flexDirection="row" gap="8">
+    <text name="chip-size" fontSize="11" color="#ffaa00">Chip: $5</text>
+    <text name="session-pl" fontSize="11" color="#88ff88">P/L: $0</text>
+    <text name="rolls-count" fontSize="10" color="#666666">Rolls: 0</text>
+  </container>
+</container>

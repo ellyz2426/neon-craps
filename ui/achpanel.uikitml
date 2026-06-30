@@ -1,0 +1,25 @@
+<container flexDirection="column" alignItems="center" gap="2" padding="8">
+  <text fontSize="18" fontWeight="bold" color="#ff44ff">ACHIEVEMENTS</text>
+  <container height="2"></container>
+  <text name="ach-1" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-2" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-3" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-4" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-5" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-6" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-7" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-8" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-9" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-10" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-11" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-12" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-13" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-14" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <text name="ach-15" fontSize="9" color="#aaaaaa">[ ] ---</text>
+  <container flexDirection="row" gap="8">
+    <text name="btn-prev" fontSize="10" color="#888888" backgroundColor="#222222" padding="3" paddingLeft="8" paddingRight="8" borderRadius="3" cursor="pointer" hover-backgroundColor="#444444">&lt; Prev</text>
+    <text name="page-info" fontSize="10" color="#666666">1/3</text>
+    <text name="btn-next" fontSize="10" color="#888888" backgroundColor="#222222" padding="3" paddingLeft="8" paddingRight="8" borderRadius="3" cursor="pointer" hover-backgroundColor="#444444">Next &gt;</text>
+  </container>
+  <text name="btn-back" fontSize="14" color="#ff4444" backgroundColor="#330000" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">BACK</text>
+</container>

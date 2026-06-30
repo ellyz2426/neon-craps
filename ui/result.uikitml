@@ -1,0 +1,9 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8" backgroundColor="#000000" backgroundOpacity="0.7" borderRadius="6">
+  <text name="result-title" fontSize="22" fontWeight="bold" color="#ffffff">ROLLED: 7</text>
+  <text name="result-dice" fontSize="16" color="#ffff00">3 + 4</text>
+  <text name="result-outcome" fontSize="14" color="#44ff44">WINNER!</text>
+  <text name="result-payout" fontSize="12" color="#ffaa00">+$50</text>
+  <container height="2"></container>
+  <text name="result-point" fontSize="11" color="#888888">Point: OFF</text>
+  <text name="btn-continue" fontSize="14" color="#00ffff" backgroundColor="#003333" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#005555">CONTINUE</text>
+</container>

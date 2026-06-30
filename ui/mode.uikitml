@@ -1,0 +1,14 @@
+<container flexDirection="column" alignItems="center" gap="6" padding="10">
+  <text fontSize="20" fontWeight="bold" color="#00ffff">SELECT MODE</text>
+  <container height="2"></container>
+  <text name="btn-classic" fontSize="14" color="#00ffff" backgroundColor="#003333" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#005555">Classic</text>
+  <text name="btn-speed" fontSize="14" color="#ff8800" backgroundColor="#332200" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#554400">Speed Round</text>
+  <text name="btn-practice" fontSize="14" color="#44ff44" backgroundColor="#003300" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#005500">Practice</text>
+  <text name="btn-highroller" fontSize="14" color="#ffff00" backgroundColor="#333300" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#555500">High Roller</text>
+  <text name="btn-daily" fontSize="14" color="#ff44ff" backgroundColor="#330033" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#550055">Daily Challenge</text>
+  <text name="btn-session" fontSize="14" color="#44ffff" backgroundColor="#003333" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#005555">Session Goal</text>
+  <text name="btn-marathon" fontSize="14" color="#8888ff" backgroundColor="#222244" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#444466">Marathon</text>
+  <text name="btn-tutorial" fontSize="14" color="#aaaaaa" backgroundColor="#222222" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">Tutorial</text>
+  <container height="2"></container>
+  <text name="btn-back" fontSize="14" color="#ff4444" backgroundColor="#330000" padding="5" paddingLeft="16" paddingRight="16" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">BACK</text>
+</container>

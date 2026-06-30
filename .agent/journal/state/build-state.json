@@ -1,0 +1,18 @@
+{
+  "game": "neon-craps",
+  "build_number": 80,
+  "date": "2026-06-30",
+  "status": "complete",
+  "total_rounds": 5,
+  "total_build_minutes": 133,
+  "final_loc": 2818,
+  "panel_count": 25,
+  "achievement_count": 110,
+  "agents": [
+    "master+sentinel-1am (round 1, 81 min)",
+    "sentinel-2am (round 2, 7 min)",
+    "sentinel-1am (round 3, 12 min)",
+    "sentinel-3am (round 4, 18 min)",
+    "sentinel-4am (round 5, 15 min)"
+  ]
+}

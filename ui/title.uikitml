@@ -6,6 +6,7 @@
   <text name="btn-scores" fontSize="16" color="#ffaa00" backgroundColor="#332200" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#554400">SCORES</text>
   <text name="btn-achievements" fontSize="16" color="#ff44ff" backgroundColor="#330033" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#550055">ACHIEVEMENTS</text>
   <text name="btn-stats" fontSize="16" color="#44ff44" backgroundColor="#003300" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#005500">STATS</text>
+  <text name="btn-strategy" fontSize="16" color="#ffaa00" backgroundColor="#332200" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#554400">STRATEGIES</text>
   <text name="btn-skins" fontSize="16" color="#ffff44" backgroundColor="#333300" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#555500">DICE SKINS</text>
   <text name="btn-settings" fontSize="16" color="#8888ff" backgroundColor="#222244" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#444466">SETTINGS</text>
   <text name="btn-help" fontSize="16" color="#aaaaaa" backgroundColor="#222222" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">HELP</text>

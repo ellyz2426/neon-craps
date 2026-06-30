@@ -1,0 +1,22 @@
+<container flexDirection="column" alignItems="center" gap="4" padding="8" backgroundColor="#000000" backgroundOpacity="0.7" borderRadius="6">
+  <text fontSize="16" fontWeight="bold" color="#ffaa00">BETTING STRATEGIES</text>
+  <container height="2"></container>
+  <text name="strat-1-name" fontSize="11" fontWeight="bold" color="#44ff44">Conservative</text>
+  <text name="strat-1-desc" fontSize="9" color="#aaaaaa">Pass + odds only. Lowest edge.</text>
+  <container height="1"></container>
+  <text name="strat-2-name" fontSize="11" fontWeight="bold" color="#ffff44">Iron Cross</text>
+  <text name="strat-2-desc" fontSize="9" color="#aaaaaa">Field + Place 5, 6, 8. Covers all but 7.</text>
+  <container height="1"></container>
+  <text name="strat-3-name" fontSize="11" fontWeight="bold" color="#ff8844">3-Point Molly</text>
+  <text name="strat-3-desc" fontSize="9" color="#aaaaaa">Pass + 2 Come bets + max odds.</text>
+  <container height="1"></container>
+  <text name="strat-4-name" fontSize="11" fontWeight="bold" color="#ff44ff">Hardway Hedger</text>
+  <text name="strat-4-desc" fontSize="9" color="#aaaaaa">Place bets + hardways on same #.</text>
+  <container height="1"></container>
+  <text name="strat-5-name" fontSize="11" fontWeight="bold" color="#4488ff">Dark Side</text>
+  <text name="strat-5-desc" fontSize="9" color="#aaaaaa">Don't Pass + Don't Come. With the house.</text>
+  <container height="1"></container>
+  <text name="strat-tip" fontSize="10" color="#00ffff">Tip: Pass + Odds has 0.37% house edge</text>
+  <container height="2"></container>
+  <text name="btn-back" fontSize="12" color="#ff4444" backgroundColor="#330000" padding="4" paddingLeft="14" paddingRight="14" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">BACK</text>
+</container>

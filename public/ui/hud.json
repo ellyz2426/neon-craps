@@ -153,6 +153,52 @@
           "gap": "8"
         },
         "dataUid": "uid-10"
+      },
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "name": "speed-timer",
+              "fontsize": "11",
+              "color": "#ff4444"
+            },
+            "dataUid": "uid-15"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "Lv.1 XP:0"
+            ],
+            "properties": {
+              "name": "xp-display",
+              "fontsize": "10",
+              "color": "#aa88ff"
+            },
+            "dataUid": "uid-16"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "name": "streak-display",
+              "fontsize": "10",
+              "color": "#ffaa00"
+            },
+            "dataUid": "uid-17"
+          }
+        ],
+        "properties": {
+          "flexdirection": "row",
+          "gap": "8"
+        },
+        "dataUid": "uid-14"
       }
     ],
     "properties": {
@@ -173,7 +219,7 @@
         "column": 0
       },
       "end": {
-        "line": 16,
+        "line": 21,
         "column": 12
       }
     },
@@ -295,6 +341,46 @@
       "end": {
         "line": 14,
         "column": 74
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 16,
+        "column": 2
+      },
+      "end": {
+        "line": 20,
+        "column": 14
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 17,
+        "column": 4
+      },
+      "end": {
+        "line": 17,
+        "column": 66
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 18,
+        "column": 4
+      },
+      "end": {
+        "line": 18,
+        "column": 74
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 19,
+        "column": 4
+      },
+      "end": {
+        "line": 19,
+        "column": 69
       }
     }
   }

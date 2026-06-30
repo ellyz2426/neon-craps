@@ -1,0 +1,18 @@
+<container flexDirection="column" gap="3" padding="6" backgroundColor="#000000" backgroundOpacity="0.6" borderRadius="4">
+  <text fontSize="12" fontWeight="bold" color="#ffffff">HOT / COLD NUMBERS</text>
+  <container flexDirection="row" gap="4">
+    <container flexDirection="column" gap="2">
+      <text fontSize="9" color="#ff4444">HOT</text>
+      <text name="hot-1" fontSize="10" color="#ff8844">--</text>
+      <text name="hot-2" fontSize="10" color="#ff8844">--</text>
+      <text name="hot-3" fontSize="10" color="#ff8844">--</text>
+    </container>
+    <container flexDirection="column" gap="2">
+      <text fontSize="9" color="#4488ff">COLD</text>
+      <text name="cold-1" fontSize="10" color="#4488ff">--</text>
+      <text name="cold-2" fontSize="10" color="#4488ff">--</text>
+      <text name="cold-3" fontSize="10" color="#4488ff">--</text>
+    </container>
+  </container>
+  <text name="seven-ratio" fontSize="9" color="#888888">7s: 0/0 (0%)</text>
+</container>

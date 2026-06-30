@@ -44,7 +44,7 @@ import {
 // ============================================================
 // GAME CONSTANTS & TYPES
 // ============================================================
-type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts';
+type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts' | 'strategy';
 type GameMode = 'classic' | 'speed' | 'practice' | 'highroller' | 'daily' | 'session' | 'marathon' | 'tutorial';
 type CrapsPhase = 'comeout' | 'point';
 type BetType = 'pass' | 'dontpass' | 'come' | 'dontcome' | 'field' | 'place4' | 'place5' | 'place6' | 'place8' | 'place9' | 'place10' | 'hard4' | 'hard6' | 'hard8' | 'hard10' | 'anyseven' | 'anycraps' | 'yo' | 'aces' | 'boxcars' | 'odds_pass' | 'odds_dontpass' | 'big6' | 'big8';
@@ -119,12 +119,16 @@ class GameStateManager {
   toastQueue: string[] = [];
   toastTimer: number = 0;
   modesPlayed: Set<string> = new Set();
+  numberCounts: Map<number, number> = new Map();
+  themesUsed: Set<number> = new Set();
+  comePoints: Map<number, number> = new Map(); // point -> bet amount for come bets on point
 
   // Career stats (persisted)
   career = {
     games: 0, totalRolls: 0, totalWon: 0, totalLost: 0,
     bestBankroll: 0, bestStreak: 0, sevenOuts: 0, naturals: 0,
     craps: 0, pointsMade: 0, hardwaysHit: 0, playTime: 0,
+    propWins: 0, comeWins: 0, lowestBank: 99999,
   };
 
   constructor() {
@@ -174,6 +178,25 @@ class GameStateManager {
       { id: 'skin_unlock', name: 'Fashionista', desc: 'Unlock a dice skin', unlocked: false },
       { id: 'theme_all', name: 'Decorator', desc: 'Try all 5 themes', unlocked: false },
       { id: 'level_10', name: 'Rising Star', desc: 'Reach level 10', unlocked: false },
+      { id: 'triple_up', name: 'Triple Up', desc: 'Triple your starting bankroll', unlocked: false },
+      { id: 'bankroll_10k', name: 'High Society', desc: 'Reach $10000 bankroll', unlocked: false },
+      { id: 'hot_number', name: 'Hot Number', desc: 'Same number rolls 3x in a row', unlocked: false },
+      { id: 'all_hard', name: 'Hard Master', desc: 'Hit all four hardways', unlocked: false },
+      { id: 'max_bet', name: 'All In', desc: 'Place a $100 chip bet', unlocked: false },
+      { id: 'seven_dodge', name: 'Seven Dodger', desc: '15 rolls without a 7', unlocked: false },
+      { id: 'quick_win', name: 'Speed Demon', desc: 'Win $500 in speed mode', unlocked: false },
+      { id: 'come_streak', name: 'Come Roller', desc: 'Win 3 come bets in a row', unlocked: false },
+      { id: 'prop_master', name: 'Prop Master', desc: 'Win 5 proposition bets', unlocked: false },
+      { id: 'iron_cross', name: 'Iron Cross', desc: 'Have field + place 5,6,8 bets active', unlocked: false },
+      { id: 'rolls_1000', name: 'Dice Master', desc: 'Roll 1000 times total', unlocked: false },
+      { id: 'level_25', name: 'Expert', desc: 'Reach level 25', unlocked: false },
+      { id: 'marathon_50', name: 'Marathon Man', desc: '50 rolls in one marathon game', unlocked: false },
+      { id: 'double_hard', name: 'Double Hard', desc: 'Hit 2 hardways in one session', unlocked: false },
+      { id: 'perfect_streak', name: 'Perfect Game', desc: 'Win 15 rolls in a row', unlocked: false },
+      { id: 'points_5', name: 'Point Machine', desc: 'Make 5 points in one session', unlocked: false },
+      { id: 'big_payout', name: 'Jackpot', desc: 'Win $500+ on a single roll', unlocked: false },
+      { id: 'all_skins', name: 'Collector', desc: 'Unlock all dice skins', unlocked: false },
+      { id: 'comeback', name: 'Comeback Kid', desc: 'Go below $100 then reach $1000+', unlocked: false },
     ];
   }
 
@@ -231,6 +254,7 @@ class GameStateManager {
     const existing = this.bets.find(b => b.type === type);
     if (existing) existing.amount += amount;
     else this.bets.push({ type, amount });
+    if (amount >= 100) { if (this.unlock('max_bet')) this.toastQueue.push('Achievement: All In!'); }
   }
 
   clearBets() { this.bets = []; }
@@ -256,6 +280,8 @@ class GameStateManager {
     this.sessionStart = Date.now();
     this.career.games++;
     this.modesPlayed.add(this.mode);
+    this.numberCounts.clear();
+    this.comePoints.clear();
     this.save();
   }
 }
@@ -546,6 +572,17 @@ function processRoll(roll: RollResult) {
   if (isHard && total === 8) { if (GM.unlock('hard8')) GM.toastQueue.push('Achievement: Hard Eight!'); GM.hardwaysHit++; GM.career.hardwaysHit++; }
   if (isHard && total === 10) { if (GM.unlock('hard10')) GM.toastQueue.push('Achievement: Hard Ten!'); GM.hardwaysHit++; GM.career.hardwaysHit++; }
 
+  // Track number frequency
+  GM.numberCounts.set(total, (GM.numberCounts.get(total) || 0) + 1);
+
+  // Check for hot number (3x in a row)
+  if (GM.rollHistory.length >= 2 && GM.rollHistory[0].total === total && GM.rollHistory[1].total === total) {
+    if (GM.unlock('hot_number')) GM.toastQueue.push('Achievement: Hot Number!');
+  }
+
+  // Track lowest bankroll for comeback achievement
+  if (GM.bankroll < GM.career.lowestBank) GM.career.lowestBank = GM.bankroll;
+
   // Resolve bets
   const result = resolveBets(roll);
 
@@ -617,6 +654,45 @@ function processRoll(roll: RollResult) {
   if (lastN.length >= 10 && !lastN.some(r => r.total === 7)) {
     if (GM.unlock('no_seven')) GM.toastQueue.push('Achievement: Lucky Streak!');
   }
+  const last15 = GM.rollHistory.slice(0, 15);
+  if (last15.length >= 15 && !last15.some(r => r.total === 7)) {
+    if (GM.unlock('seven_dodge')) GM.toastQueue.push('Achievement: Seven Dodger!');
+  }
+
+  // Additional achievement checks
+  if (GM.bankroll >= GM.startBankroll * 3) { if (GM.unlock('triple_up')) GM.toastQueue.push('Achievement: Triple Up!'); }
+  if (GM.bankroll >= 10000) { if (GM.unlock('bankroll_10k')) GM.toastQueue.push('Achievement: High Society!'); }
+  if (GM.career.totalRolls >= 1000) GM.unlock('rolls_1000');
+  if (GM.level >= 25) { if (GM.unlock('level_25')) GM.toastQueue.push('Achievement: Expert!'); }
+  if (GM.winStreak >= 15) { if (GM.unlock('perfect_streak')) GM.toastQueue.push('Achievement: Perfect Game!'); }
+  if (GM.pointsMade >= 5) { if (GM.unlock('points_5')) GM.toastQueue.push('Achievement: Point Machine!'); }
+  if (result.totalPayout >= 500) { if (GM.unlock('big_payout')) GM.toastQueue.push('Achievement: Jackpot!'); }
+  if (GM.hardwaysHit >= 2) { if (GM.unlock('double_hard')) GM.toastQueue.push('Achievement: Double Hard!'); }
+  if (GM.mode === 'marathon' && GM.rollCount >= 50) { if (GM.unlock('marathon_50')) GM.toastQueue.push('Achievement: Marathon Man!'); }
+  if (GM.mode === 'speed' && GM.totalWon >= 500) { if (GM.unlock('quick_win')) GM.toastQueue.push('Achievement: Speed Demon!'); }
+
+  // Iron Cross check
+  const hasField = GM.bets.some(b => b.type === 'field');
+  const hasPlace5 = GM.bets.some(b => b.type === 'place5');
+  const hasPlace6 = GM.bets.some(b => b.type === 'place6');
+  const hasPlace8 = GM.bets.some(b => b.type === 'place8');
+  if (hasField && hasPlace5 && hasPlace6 && hasPlace8) {
+    if (GM.unlock('iron_cross')) GM.toastQueue.push('Achievement: Iron Cross!');
+  }
+
+  // Comeback check
+  if (GM.career.lowestBank < 100 && GM.bankroll >= 1000) {
+    if (GM.unlock('comeback')) GM.toastQueue.push('Achievement: Comeback Kid!');
+  }
+
+  // All hardways check
+  const allHard = GM.achievements.filter(a => ['hard4', 'hard6', 'hard8', 'hard10'].includes(a.id)).every(a => a.unlocked);
+  if (allHard) { if (GM.unlock('all_hard')) GM.toastQueue.push('Achievement: Hard Master!'); }
+
+  // All skins check
+  let allSkins = true;
+  for (let i = 0; i < DICE_SKINS.length; i++) { if (i > 0 && !checkSkinUnlock(i)) { allSkins = false; break; } }
+  if (allSkins) { if (GM.unlock('all_skins')) GM.toastQueue.push('Achievement: Collector!'); }
 
   // XP
   GM.addXp(Math.floor(result.totalPayout / 10) + 5);
@@ -648,11 +724,19 @@ const TABLE_DEPTH = 1.5;
 const betZones: { mesh: Mesh; type: BetType; label: string }[] = [];
 
 // Particle pool
-const MAX_PARTICLES = 150;
+const MAX_PARTICLES = 200;
 const particles: { mesh: Mesh; vel: Vector3; life: number; maxLife: number }[] = [];
+
+// Chip stacks on bet zones (3D visualization)
+const chipMeshes: Map<BetType, Group> = new Map();
+const CHIP_COLORS: Record<number, number> = { 1: 0xffffff, 5: 0xff4444, 10: 0x4444ff, 25: 0x44ff44, 100: 0x888888 };
+
+// Bet zone highlight meshes
+const betZoneHighlights: Map<BetType, Mesh> = new Map();
 
 // Panel entities for show/hide
 const panelEntities: Map<string, Entity> = new Map();
+const followerNames: Set<string> = new Set();
 
 function createDie(x: number, z: number): Group {
   const skin = DICE_SKINS[GM.currentSkin];
@@ -960,6 +1044,96 @@ function spawnParticles(pos: Vector3, count: number, color: number) {
   }
 }
 
+function spawnBigWinParticles(pos: Vector3, amount: number) {
+  const colors = [0x44ff44, 0xffff00, 0xff8800, 0x00ffff, 0xff44ff];
+  const count = Math.min(60, Math.floor(amount / 50) + 20);
+  for (let i = 0; i < count; i++) {
+    const color = colors[i % colors.length];
+    const p = particles.find(pp => pp.life <= 0);
+    if (!p) break;
+    p.mesh.position.copy(pos).add(new Vector3((Math.random() - 0.5) * 0.5, 0, (Math.random() - 0.5) * 0.5));
+    p.vel.set((Math.random() - 0.5) * 4, Math.random() * 5 + 2, (Math.random() - 0.5) * 4);
+    p.life = 1.2 + Math.random() * 0.6;
+    p.maxLife = p.life;
+    (p.mesh.material as MeshStandardMaterial).color.set(color);
+    (p.mesh.material as MeshStandardMaterial).emissive.set(color);
+    p.mesh.visible = true;
+  }
+}
+
+// Chip stack on bet zone
+function createChipStack(betType: BetType, amount: number) {
+  const zone = betZones.find(z => z.type === betType);
+  if (!zone) return;
+
+  // Remove existing
+  const existing = chipMeshes.get(betType);
+  if (existing) { world.scene.remove(existing); chipMeshes.delete(betType); }
+
+  if (amount <= 0) return;
+
+  const group = new Group();
+  const chipCount = Math.min(5, Math.ceil(amount / 25));
+  const chipGeo = new CylinderGeometry(0.025, 0.025, 0.008, 12);
+
+  // Determine dominant chip color
+  let chipColor = CHIP_COLORS[1];
+  for (const val of [100, 25, 10, 5, 1]) {
+    if (amount >= val) { chipColor = CHIP_COLORS[val]; break; }
+  }
+
+  for (let i = 0; i < chipCount; i++) {
+    const mat = new MeshStandardMaterial({
+      color: chipColor, emissive: chipColor, emissiveIntensity: 0.3,
+      metalness: 0.4, roughness: 0.3,
+    });
+    const chip = new Mesh(chipGeo, mat);
+    chip.position.y = i * 0.01;
+    group.add(chip);
+
+    // Chip edge ring
+    const ringGeo = new TorusGeometry(0.025, 0.002, 6, 12);
+    const ringMat = new MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.3, transparent: true, opacity: 0.5 });
+    const ring = new Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = i * 0.01;
+    group.add(ring);
+  }
+
+  group.position.copy(zone.mesh.position);
+  group.position.y = TABLE_Y + 0.01;
+  world.scene.add(group);
+  chipMeshes.set(betType, group);
+}
+
+function updateAllChipStacks() {
+  // Clear chips for bets that no longer exist
+  for (const [type, mesh] of chipMeshes) {
+    if (!GM.bets.find(b => b.type === type)) {
+      world.scene.remove(mesh);
+      chipMeshes.delete(type);
+    }
+  }
+  // Create/update chips for active bets
+  for (const bet of GM.bets) {
+    createChipStack(bet.type, bet.amount);
+  }
+}
+
+function updateBetZoneHighlights() {
+  for (const zone of betZones) {
+    const hasBet = GM.bets.some(b => b.type === zone.type);
+    const mat = zone.mesh.material as MeshStandardMaterial;
+    if (hasBet) {
+      mat.opacity = 0.5;
+      mat.emissiveIntensity = 0.5;
+    } else {
+      mat.opacity = 0.25;
+      mat.emissiveIntensity = 0.2;
+    }
+  }
+}
+
 
 // ============================================================
 // PANEL HELPERS
@@ -970,15 +1144,30 @@ const setText = (e: Entity, id: string, text: string) =>
 
 function showPanel(name: string) {
   panelEntities.forEach((e, n) => {
-    const obj = e.object3D;
-    if (obj) obj.visible = n === name;
+    const shouldShow = n === name;
+    if (followerNames.has(n)) {
+      const obj = e.object3D;
+      if (obj) obj.visible = shouldShow;
+    } else {
+      const hasScreen = e.hasComponent(ScreenSpace);
+      if (shouldShow && !hasScreen) e.addComponent(ScreenSpace, {});
+      else if (!shouldShow && hasScreen) e.removeComponent(ScreenSpace);
+      const obj = e.object3D;
+      if (obj) obj.visible = shouldShow;
+    }
   });
 }
 
 function hideAllPanels() {
-  panelEntities.forEach((e) => {
-    const obj = e.object3D;
-    if (obj) obj.visible = false;
+  panelEntities.forEach((e, n) => {
+    if (followerNames.has(n)) {
+      const obj = e.object3D;
+      if (obj) obj.visible = false;
+    } else {
+      if (e.hasComponent(ScreenSpace)) e.removeComponent(ScreenSpace);
+      const obj = e.object3D;
+      if (obj) obj.visible = false;
+    }
   });
 }
 
@@ -1106,7 +1295,16 @@ function updateDicePhysics(delta: number) {
       (dice[0].mesh.position.z + dice[1].mesh.position.z) / 2
     );
     const pColor = result.totalPayout > 0 ? 0x44ff44 : (total === 7 && GM.phase === 'comeout' ? 0x44ff44 : 0xff4444);
-    spawnParticles(dicePos, 15, pColor);
+    if (result.totalPayout >= 200) {
+      spawnBigWinParticles(dicePos, result.totalPayout);
+    } else {
+      spawnParticles(dicePos, 15, pColor);
+    }
+
+    // Update 3D chip stacks and bet zone highlights
+    updateAllChipStacks();
+    updateBetZoneHighlights();
+    updateHotColdPanel();
 
     // Show result
     GM.state = 'result';
@@ -1198,6 +1396,10 @@ function updateHUD() {
   const pl = GM.bankroll - GM.startBankroll;
   setText(e, 'session-pl', `P/L: ${pl >= 0 ? '+' : ''}$${pl}`);
   setText(e, 'rolls-count', `Rolls: ${GM.rollCount}`);
+  setText(e, 'speed-timer', GM.mode === 'speed' ? `Time: ${Math.max(0, Math.floor(GM.speedTimer))}s` : '');
+  const xpNeeded = 100 + GM.level * 50;
+  setText(e, 'xp-display', `Lv.${GM.level} XP:${GM.xp}/${xpNeeded}`);
+  setText(e, 'streak-display', GM.winStreak >= 3 ? `Streak: ${GM.winStreak}!` : '');
 }
 
 function updateBetsPanel() {
@@ -1258,6 +1460,37 @@ function updateStatsPanel() {
   setText(e, 'stat-10', `Points Made: ${GM.career.pointsMade}`);
   setText(e, 'stat-11', `Hardways Hit: ${GM.career.hardwaysHit}`);
   setText(e, 'stat-12', `Play Time: ${GM.career.playTime}m`);
+}
+
+function updateHotColdPanel() {
+  const e = panelEntities.get('hotcold');
+  if (!e) return;
+
+  // Build sorted array of number frequencies
+  const nums = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const sorted = nums
+    .map(n => ({ num: n, count: GM.numberCounts.get(n) || 0 }))
+    .sort((a, b) => b.count - a.count);
+
+  // Hot: top 3
+  for (let i = 0; i < 3; i++) {
+    const entry = sorted[i];
+    setText(e, `hot-${i + 1}`, entry && entry.count > 0 ? `${entry.num}: ${entry.count}x` : '--');
+  }
+  // Cold: bottom 3
+  const cold = sorted.filter(s => s.count === 0).length >= 3
+    ? sorted.filter(s => s.count === 0).slice(0, 3)
+    : sorted.slice(-3).reverse();
+  for (let i = 0; i < 3; i++) {
+    const entry = cold[i];
+    setText(e, `cold-${i + 1}`, entry ? `${entry.num}: ${entry.count}x` : '--');
+  }
+
+  // Seven ratio
+  const sevens = GM.numberCounts.get(7) || 0;
+  const totalRolls = GM.rollCount;
+  const pct = totalRolls > 0 ? Math.round((sevens / totalRolls) * 100) : 0;
+  setText(e, 'seven-ratio', `7s: ${sevens}/${totalRolls} (${pct}%)`);
 }
 
 function updateSkinsPanel() {
@@ -1343,10 +1576,27 @@ function updatePanelVisibility() {
     bets: gameplay,
     payouts: s === 'payouts' || s === 'betting',
     toast: GM.toastTimer > 0,
+    hotcold: gameplay,
+    strategy: s === 'strategy',
   };
   panelEntities.forEach((e, name) => {
-    const obj = e.object3D;
-    if (obj) obj.visible = vis[name] || false;
+    const shouldShow = vis[name] || false;
+    if (followerNames.has(name)) {
+      // Follower panels (hud, toast) use Object3D.visible — they're 3D objects
+      const obj = e.object3D;
+      if (obj) obj.visible = shouldShow;
+    } else {
+      // ScreenSpace panels: toggle both the component (controls overlay rendering)
+      // AND object3D.visible (prevents world-space rendering at origin).
+      const hasScreen = e.hasComponent(ScreenSpace);
+      if (shouldShow && !hasScreen) {
+        e.addComponent(ScreenSpace, {});
+      } else if (!shouldShow && hasScreen) {
+        e.removeComponent(ScreenSpace);
+      }
+      const obj = e.object3D;
+      if (obj) obj.visible = shouldShow;
+    }
   });
 }
 
@@ -1370,6 +1620,8 @@ class CrapsUISystem extends createSystem({
   skins: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/skins.json')] },
   settings: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/settings.json')] },
   toast: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/toast.json')] },
+  hotcold: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/hotcold.json')] },
+  strategy: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/strategy.json')] },
 }) {
   init() {
     const wire = (doc: UIKitDocument, id: string, fn: () => void) => {
@@ -1387,6 +1639,7 @@ class CrapsUISystem extends createSystem({
       wire(doc, 'btn-skins', () => { audio.playSfx('click'); GM.state = 'skins'; updateSkinsPanel(); });
       wire(doc, 'btn-settings', () => { audio.playSfx('click'); GM.state = 'settings'; updateSettingsPanel(); });
       wire(doc, 'btn-help', () => { audio.playSfx('click'); GM.state = 'help'; });
+      wire(doc, 'btn-strategy', () => { audio.playSfx('click'); GM.state = 'strategy'; });
     });
 
     // ── Mode ──
@@ -1421,21 +1674,21 @@ class CrapsUISystem extends createSystem({
       wire(doc, 'btn-chip10', () => { audio.playSfx('chip_select'); GM.chipSize = 10; });
       wire(doc, 'btn-chip25', () => { audio.playSfx('chip_select'); GM.chipSize = 25; });
       wire(doc, 'btn-chip100', () => { audio.playSfx('chip_select'); GM.chipSize = 100; });
-      wire(doc, 'btn-pass', () => { audio.playSfx('bet_place'); GM.addBet('pass', GM.chipSize); updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-dontpass', () => { audio.playSfx('bet_place'); GM.addBet('dontpass', GM.chipSize); updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-field', () => { audio.playSfx('bet_place'); GM.addBet('field', GM.chipSize); updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-come', () => { audio.playSfx('bet_place'); GM.addBet('come', GM.chipSize); updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-place', () => { audio.playSfx('bet_place'); GM.addBet(PLACE_BETS[placeIdx], GM.chipSize); placeIdx = (placeIdx + 1) % PLACE_BETS.length; updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-hard', () => { audio.playSfx('bet_place'); GM.addBet(HARD_BETS[hardIdx], GM.chipSize); hardIdx = (hardIdx + 1) % HARD_BETS.length; updateHUD(); updateBetsPanel(); });
-      wire(doc, 'btn-prop', () => { audio.playSfx('bet_place'); GM.addBet(PROP_BETS[propIdx], GM.chipSize); propIdx = (propIdx + 1) % PROP_BETS.length; updateHUD(); updateBetsPanel(); });
+      wire(doc, 'btn-pass', () => { audio.playSfx('bet_place'); GM.addBet('pass', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-dontpass', () => { audio.playSfx('bet_place'); GM.addBet('dontpass', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-field', () => { audio.playSfx('bet_place'); GM.addBet('field', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-come', () => { audio.playSfx('bet_place'); GM.addBet('come', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-place', () => { audio.playSfx('bet_place'); GM.addBet(PLACE_BETS[placeIdx], GM.chipSize); placeIdx = (placeIdx + 1) % PLACE_BETS.length; updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-hard', () => { audio.playSfx('bet_place'); GM.addBet(HARD_BETS[hardIdx], GM.chipSize); hardIdx = (hardIdx + 1) % HARD_BETS.length; updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-prop', () => { audio.playSfx('bet_place'); GM.addBet(PROP_BETS[propIdx], GM.chipSize); propIdx = (propIdx + 1) % PROP_BETS.length; updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
       wire(doc, 'btn-odds', () => {
         audio.playSfx('bet_place');
         const hasDP = GM.bets.some(b => b.type === 'dontpass');
         GM.addBet(hasDP ? 'odds_dontpass' : 'odds_pass', GM.chipSize);
-        updateHUD(); updateBetsPanel();
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
       });
       wire(doc, 'btn-roll', () => { throwDice(); });
-      wire(doc, 'btn-clear', () => { audio.playSfx('bet_clear'); GM.clearBets(); updateHUD(); updateBetsPanel(); });
+      wire(doc, 'btn-clear', () => { audio.playSfx('bet_clear'); GM.clearBets(); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
     });
 
     // ── Result ──
@@ -1515,6 +1768,14 @@ class CrapsUISystem extends createSystem({
       wire(doc, 'btn-theme-next', () => { audio.playSfx('click'); GM.currentTheme = (GM.currentTheme + 1) % THEMES.length; updateSettingsPanel(); GM.save(); });
       wire(doc, 'btn-back', () => { audio.playSfx('click'); GM.state = 'title'; });
     });
+
+    // ── Strategy ──
+    this.queries.strategy.subscribe('qualify', (entity: Entity) => {
+      const doc = getDoc(entity); if (!doc) return;
+      wire(doc, 'btn-back', () => { audio.playSfx('click'); GM.state = 'title'; });
+    });
+
+    // ── Hot/Cold — no buttons needed ──
   }
 
   update() { /* wiring-only system; no per-frame work */ }
@@ -1525,6 +1786,7 @@ class CrapsUISystem extends createSystem({
 // ============================================================
 class CrapsGameSystem extends createSystem({}) {
   private countdownTimer = 0;
+  private streakFireTimer = 0;
 
   update(delta: number, time: number) {
     // Dice physics
@@ -1542,6 +1804,38 @@ class CrapsGameSystem extends createSystem({}) {
         (p.mesh.material as MeshStandardMaterial).opacity = opacity;
         if (p.life <= 0) p.mesh.visible = false;
       }
+    }
+
+    // Streak fire effect — spawn flame particles around table edges during hot streaks
+    if (GM.winStreak >= 3 && (GM.state === 'betting' || GM.state === 'result')) {
+      this.streakFireTimer += delta;
+      if (this.streakFireTimer > 0.15) {
+        this.streakFireTimer = 0;
+        const intensity = Math.min(GM.winStreak, 10);
+        const fireColors = [0xff4400, 0xff8800, 0xffaa00, 0xffff00];
+        for (let i = 0; i < intensity; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 1.5 + Math.random() * 0.3;
+          const pos = new Vector3(
+            Math.cos(angle) * radius,
+            TABLE_Y + 0.1,
+            Math.sin(angle) * radius * 0.5
+          );
+          const color = fireColors[Math.floor(Math.random() * fireColors.length)];
+          const pp = particles.find(p => p.life <= 0);
+          if (pp) {
+            pp.mesh.position.copy(pos);
+            pp.vel.set((Math.random() - 0.5) * 0.3, 1 + Math.random() * 1.5, (Math.random() - 0.5) * 0.3);
+            pp.life = 0.4 + Math.random() * 0.3;
+            pp.maxLife = pp.life;
+            (pp.mesh.material as MeshStandardMaterial).color.set(color);
+            (pp.mesh.material as MeshStandardMaterial).emissive.set(color);
+            pp.mesh.visible = true;
+          }
+        }
+      }
+    } else {
+      this.streakFireTimer = 0;
     }
 
     // Countdown
@@ -1630,7 +1924,16 @@ class CrapsGameSystem extends createSystem({}) {
     const left = this.input.gamepads?.left;
     if (left) {
       if (left.getButtonDown(InputComponent.Trigger)) {
-        if (GM.state === 'betting') { audio.playSfx('bet_place'); GM.addBet('pass', GM.chipSize); updateHUD(); updateBetsPanel(); }
+        if (GM.state === 'betting') { audio.playSfx('bet_place'); GM.addBet('pass', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); }
+      }
+      if (left.getButtonDown(InputComponent.Squeeze)) {
+        // Cycle through common bets with left squeeze
+        const quickBets: BetType[] = ['pass', 'field', 'come', 'dontpass'];
+        const currentBetTypes = GM.bets.map(b => b.type);
+        const nextBet = quickBets.find(b => !currentBetTypes.includes(b)) || quickBets[0];
+        audio.playSfx('bet_place');
+        GM.addBet(nextBet, GM.chipSize);
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
       }
     }
   }
@@ -1682,7 +1985,11 @@ async function main() {
     { name: 'bets', config: './ui/bets.json', follower: false },
     { name: 'payouts', config: './ui/payouts.json', follower: false },
     { name: 'toast', config: './ui/toast.json', follower: true, ox: 0, oy: 0.3, oz: -1.0 },
+    { name: 'hotcold', config: './ui/hotcold.json', follower: false },
+    { name: 'strategy', config: './ui/strategy.json', follower: false },
   ];
+
+  panelConfigs.filter(p => p.follower).forEach(p => followerNames.add(p.name));
 
   for (const pc of panelConfigs) {
     const entity = world.createTransformEntity();
@@ -1693,8 +2000,19 @@ async function main() {
       fv[0] = pc.ox ?? 0;
       fv[1] = pc.oy ?? 0;
       fv[2] = pc.oz ?? -1.2;
+      // Start follower panels hidden
+      const obj = entity.object3D;
+      if (obj) obj.visible = false;
     } else {
-      entity.addComponent(ScreenSpace, {});
+      // Only add ScreenSpace to 'title' (initially visible).
+      // Other panels: no ScreenSpace AND object3D hidden to prevent
+      // world-space rendering at origin.
+      if (pc.name === 'title') {
+        entity.addComponent(ScreenSpace, {});
+      } else {
+        const obj = entity.object3D;
+        if (obj) obj.visible = false;
+      }
     }
     panelEntities.set(pc.name, entity);
   }

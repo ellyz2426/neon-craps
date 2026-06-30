@@ -14,4 +14,9 @@
     <text name="session-pl" fontSize="11" color="#88ff88">P/L: $0</text>
     <text name="rolls-count" fontSize="10" color="#666666">Rolls: 0</text>
   </container>
+  <container flexDirection="row" gap="8">
+    <text name="speed-timer" fontSize="11" color="#ff4444"></text>
+    <text name="xp-display" fontSize="10" color="#aa88ff">Lv.1 XP:0</text>
+    <text name="streak-display" fontSize="10" color="#ffaa00"></text>
+  </container>
 </container>

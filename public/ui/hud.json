@@ -199,6 +199,39 @@
           "gap": "8"
         },
         "dataUid": "uid-14"
+      },
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "name": "session-time",
+              "fontsize": "9",
+              "color": "#555555"
+            },
+            "dataUid": "uid-19"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "name": "house-edge",
+              "fontsize": "9",
+              "color": "#555555"
+            },
+            "dataUid": "uid-20"
+          }
+        ],
+        "properties": {
+          "flexdirection": "row",
+          "gap": "8"
+        },
+        "dataUid": "uid-18"
       }
     ],
     "properties": {
@@ -219,7 +252,7 @@
         "column": 0
       },
       "end": {
-        "line": 21,
+        "line": 25,
         "column": 12
       }
     },
@@ -381,6 +414,36 @@
       "end": {
         "line": 19,
         "column": 69
+      }
+    },
+    "uid-18": {
+      "start": {
+        "line": 21,
+        "column": 2
+      },
+      "end": {
+        "line": 24,
+        "column": 14
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 22,
+        "column": 4
+      },
+      "end": {
+        "line": 22,
+        "column": 66
+      }
+    },
+    "uid-20": {
+      "start": {
+        "line": 23,
+        "column": 4
+      },
+      "end": {
+        "line": 23,
+        "column": 64
       }
     }
   }

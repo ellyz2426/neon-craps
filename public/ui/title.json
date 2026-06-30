@@ -219,6 +219,19 @@
           "color": "#666666"
         },
         "dataUid": "uid-14"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "Career Rolls: 0"
+        ],
+        "properties": {
+          "name": "career-rolls",
+          "fontsize": "9",
+          "color": "#444444"
+        },
+        "dataUid": "uid-15"
       }
     ],
     "properties": {
@@ -237,7 +250,7 @@
         "column": 0
       },
       "end": {
-        "line": 14,
+        "line": 15,
         "column": 12
       }
     },
@@ -369,6 +382,16 @@
       "end": {
         "line": 13,
         "column": 84
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 14,
+        "column": 2
+      },
+      "end": {
+        "line": 14,
+        "column": 79
       }
     }
   }

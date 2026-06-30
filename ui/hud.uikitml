@@ -19,4 +19,8 @@
     <text name="xp-display" fontSize="10" color="#aa88ff">Lv.1 XP:0</text>
     <text name="streak-display" fontSize="10" color="#ffaa00"></text>
   </container>
+  <container flexDirection="row" gap="8">
+    <text name="session-time" fontSize="9" color="#555555"></text>
+    <text name="house-edge" fontSize="9" color="#555555"></text>
+  </container>
 </container>

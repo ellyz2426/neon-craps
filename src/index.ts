@@ -122,6 +122,7 @@ class GameStateManager {
   numberCounts: Map<number, number> = new Map();
   themesUsed: Set<number> = new Set();
   comePoints: Map<number, number> = new Map(); // point -> bet amount for come bets on point
+  dontComePoints: Map<number, number> = new Map(); // point -> bet amount for don't come on point
 
   // Career stats (persisted)
   career = {
@@ -129,6 +130,7 @@ class GameStateManager {
     bestBankroll: 0, bestStreak: 0, sevenOuts: 0, naturals: 0,
     craps: 0, pointsMade: 0, hardwaysHit: 0, playTime: 0,
     propWins: 0, comeWins: 0, lowestBank: 99999,
+    ironCrossWins: 0, darkSideWins: 0, presetsUsed: 0,
   };
 
   constructor() {
@@ -197,6 +199,16 @@ class GameStateManager {
       { id: 'big_payout', name: 'Jackpot', desc: 'Win $500+ on a single roll', unlocked: false },
       { id: 'all_skins', name: 'Collector', desc: 'Unlock all dice skins', unlocked: false },
       { id: 'comeback', name: 'Comeback Kid', desc: 'Go below $100 then reach $1000+', unlocked: false },
+      { id: 'session_10m', name: 'Dedicated Player', desc: 'Play for 10 minutes', unlocked: false },
+      { id: 'session_30m', name: 'Marathon Session', desc: 'Play for 30 minutes', unlocked: false },
+      { id: 'iron_cross_win', name: 'Cross Victory', desc: 'Win 3 times with Iron Cross active', unlocked: false },
+      { id: 'dark_side_3', name: 'Dark Rider', desc: 'Win 3 Don\'t Pass bets', unlocked: false },
+      { id: 'preset_user', name: 'Strategist', desc: 'Use a betting preset', unlocked: false },
+      { id: 'bankroll_25k', name: 'Mogul', desc: 'Reach $25000 bankroll', unlocked: false },
+      { id: 'level_50', name: 'Master', desc: 'Reach level 50', unlocked: false },
+      { id: 'streak_20', name: 'Legendary Run', desc: 'Win 20 rolls in a row', unlocked: false },
+      { id: 'all_bets', name: 'Full Table', desc: 'Place 10+ different bet types in one session', unlocked: false },
+      { id: 'quick_double', name: 'Fast Fortune', desc: 'Double bankroll in under 10 rolls', unlocked: false },
     ];
   }
 
@@ -282,6 +294,7 @@ class GameStateManager {
     this.modesPlayed.add(this.mode);
     this.numberCounts.clear();
     this.comePoints.clear();
+    this.dontComePoints.clear();
     this.save();
   }
 }
@@ -427,15 +440,25 @@ function resolveBets(roll: RollResult): { totalPayout: number; messages: string[
         break;
       case 'come':
         if (GM.phase === 'point') {
-          if (total === 7 || total === 11) { payout = bet.amount; remove = true; }
+          if (total === 7 || total === 11) { payout = bet.amount; remove = true; if (GM.unlock('come_win')) GM.toastQueue.push('Achievement: Come Winner!'); GM.career.comeWins++; }
           else if (total === 2 || total === 3 || total === 12) { lost = true; remove = true; }
+          else {
+            // Come bet moves to number — track it
+            GM.comePoints.set(total, (GM.comePoints.get(total) || 0) + bet.amount);
+            remove = true; // Remove from active bets (tracked in comePoints)
+          }
         }
         break;
       case 'dontcome':
         if (GM.phase === 'point') {
-          if (total === 2 || total === 3) { payout = bet.amount; remove = true; }
+          if (total === 2 || total === 3) { payout = bet.amount; remove = true; GM.career.darkSideWins++; }
           else if (total === 12) { remove = true; /* push */ }
           else if (total === 7 || total === 11) { lost = true; remove = true; }
+          else {
+            // Don't Come moves to number — track it
+            GM.dontComePoints.set(total, (GM.dontComePoints.get(total) || 0) + bet.amount);
+            remove = true;
+          }
         }
         break;
       case 'field':
@@ -544,6 +567,48 @@ function resolveBets(roll: RollResult): { totalPayout: number; messages: string[
   // Remove one-roll bets and lost bets
   GM.bets = GM.bets.filter(b => !betsToRemove.includes(b.type));
 
+  // Resolve come points (bets that moved to a number)
+  if (GM.comePoints.size > 0) {
+    const comeAmount = GM.comePoints.get(total);
+    if (comeAmount && comeAmount > 0) {
+      totalPayout += comeAmount;
+      messages.push(`come(${total}): +$${comeAmount}`);
+      GM.career.comeWins++;
+      if (GM.unlock('come_win')) GM.toastQueue.push('Achievement: Come Winner!');
+      GM.comePoints.delete(total);
+    }
+    if (total === 7) {
+      // Seven out — lose all come point bets
+      for (const [num, amt] of GM.comePoints) {
+        GM.totalLost += amt;
+        GM.career.totalLost += amt;
+        messages.push(`come(${num}): -$${amt}`);
+      }
+      GM.comePoints.clear();
+    }
+  }
+
+  // Resolve don't come points
+  if (GM.dontComePoints.size > 0) {
+    const dcAmount = GM.dontComePoints.get(total);
+    if (dcAmount && dcAmount > 0) {
+      // Number hit — don't come loses
+      GM.totalLost += dcAmount;
+      GM.career.totalLost += dcAmount;
+      messages.push(`dc(${total}): -$${dcAmount}`);
+      GM.dontComePoints.delete(total);
+    }
+    if (total === 7) {
+      // Seven — don't come points all win
+      for (const [num, amt] of GM.dontComePoints) {
+        totalPayout += amt;
+        messages.push(`dc(${num}): +$${amt}`);
+        GM.career.darkSideWins++;
+      }
+      GM.dontComePoints.clear();
+    }
+  }
+
   if (totalPayout > 0) {
     GM.bankroll += totalPayout;
     GM.totalWon += totalPayout;
@@ -551,6 +616,12 @@ function resolveBets(roll: RollResult): { totalPayout: number; messages: string[
     GM.winStreak++;
     if (GM.winStreak > GM.bestStreak) GM.bestStreak = GM.winStreak;
     if (GM.winStreak > GM.career.bestStreak) GM.career.bestStreak = GM.winStreak;
+    // Track iron cross wins
+    const hasField2 = GM.bets.some(b => b.type === 'field');
+    const hasP5 = GM.bets.some(b => b.type === 'place5');
+    const hasP6 = GM.bets.some(b => b.type === 'place6');
+    const hasP8 = GM.bets.some(b => b.type === 'place8');
+    if (hasField2 && hasP5 && hasP6 && hasP8) GM.career.ironCrossWins++;
   } else if (messages.length > 0) {
     GM.winStreak = 0;
   }
@@ -617,6 +688,7 @@ function processRoll(roll: RollResult) {
       GM.point = 0;
       // Remove all persistent bets on seven-out
       GM.bets = GM.bets.filter(b => !['pass', 'dontpass', 'odds_pass', 'odds_dontpass', 'place4', 'place5', 'place6', 'place8', 'place9', 'place10', 'big6', 'big8', 'hard4', 'hard6', 'hard8', 'hard10'].includes(b.type));
+      // Come/don't come points already resolved in resolveBets
       if (GM.unlock('seven_out')) GM.toastQueue.push('Achievement: Seven Out!');
       audio.playSfx('seven_out');
     }
@@ -693,6 +765,25 @@ function processRoll(roll: RollResult) {
   let allSkins = true;
   for (let i = 0; i < DICE_SKINS.length; i++) { if (i > 0 && !checkSkinUnlock(i)) { allSkins = false; break; } }
   if (allSkins) { if (GM.unlock('all_skins')) GM.toastQueue.push('Achievement: Collector!'); }
+
+  // New R3 achievement checks
+  if (GM.bankroll >= 25000) { if (GM.unlock('bankroll_25k')) GM.toastQueue.push('Achievement: Mogul!'); }
+  if (GM.level >= 50) { if (GM.unlock('level_50')) GM.toastQueue.push('Achievement: Master!'); }
+  if (GM.winStreak >= 20) { if (GM.unlock('streak_20')) GM.toastQueue.push('Achievement: Legendary Run!'); }
+  // Quick double — check if <10 rolls and doubled
+  if (GM.rollCount <= 10 && GM.bankroll >= GM.startBankroll * 2) {
+    if (GM.unlock('quick_double')) GM.toastQueue.push('Achievement: Fast Fortune!');
+  }
+  // All bet types in session
+  const uniqueBetTypes = new Set(GM.bets.map(b => b.type));
+  // Also count come/don't come points as bet types used
+  if (GM.comePoints.size > 0) uniqueBetTypes.add('come');
+  if (GM.dontComePoints.size > 0) uniqueBetTypes.add('dontcome');
+  if (uniqueBetTypes.size >= 10) { if (GM.unlock('all_bets')) GM.toastQueue.push('Achievement: Full Table!'); }
+  // Dark side wins
+  if (GM.career.darkSideWins >= 3) { if (GM.unlock('dark_side_3')) GM.toastQueue.push('Achievement: Dark Rider!'); }
+  // Iron cross wins
+  if (GM.career.ironCrossWins >= 3) { if (GM.unlock('iron_cross_win')) GM.toastQueue.push('Achievement: Cross Victory!'); }
 
   // XP
   GM.addXp(Math.floor(result.totalPayout / 10) + 5);
@@ -1380,6 +1471,12 @@ function updateGameOverPanel() {
   setText(e, 'final-lost', `Lost: $${GM.totalLost}`);
   setText(e, 'final-streak', `Best Streak: ${GM.bestStreak}`);
   setText(e, 'final-sevens', `Seven-Outs: ${GM.sevenOuts}`);
+  const elapsed = Math.floor((Date.now() - GM.sessionStart) / 60000);
+  setText(e, 'final-time', `Time: ${elapsed}m`);
+  const net = GM.bankroll - GM.startBankroll;
+  setText(e, 'final-net', `Net: ${net >= 0 ? '+' : ''}$${net}`);
+  const roi = GM.startBankroll > 0 ? Math.round((net / GM.startBankroll) * 100) : 0;
+  setText(e, 'final-roi', `ROI: ${roi >= 0 ? '+' : ''}${roi}%`);
 }
 
 function updateHUD() {
@@ -1400,6 +1497,20 @@ function updateHUD() {
   const xpNeeded = 100 + GM.level * 50;
   setText(e, 'xp-display', `Lv.${GM.level} XP:${GM.xp}/${xpNeeded}`);
   setText(e, 'streak-display', GM.winStreak >= 3 ? `Streak: ${GM.winStreak}!` : '');
+
+  // Session timer
+  const sessionElapsed = Math.floor((Date.now() - GM.sessionStart) / 1000);
+  const mins = Math.floor(sessionElapsed / 60);
+  const secs = sessionElapsed % 60;
+  setText(e, 'session-time', mins > 0 ? `${mins}m ${secs}s` : `${secs}s`);
+
+  // Session time achievements
+  if (mins >= 10) GM.unlock('session_10m');
+  if (mins >= 30) GM.unlock('session_30m');
+
+  // House edge for current bets
+  const betEdge = calculateBetEdge();
+  setText(e, 'house-edge', betEdge !== null ? `Edge: ${betEdge}%` : '');
 }
 
 function updateBetsPanel() {
@@ -1409,6 +1520,36 @@ function updateBetsPanel() {
     const bet = GM.bets[i - 1];
     setText(e, `bet-${i}`, bet ? `${bet.type}: $${bet.amount}` : '--');
   }
+  // Show come/don't come points
+  let comeTxt = '';
+  for (const [num, amt] of GM.comePoints) comeTxt += `C${num}:$${amt} `;
+  for (const [num, amt] of GM.dontComePoints) comeTxt += `DC${num}:$${amt} `;
+  // Use last bet slots for come points display
+  if (comeTxt.length > 0 && GM.bets.length < 8) {
+    setText(e, `bet-${Math.min(GM.bets.length + 1, 8)}`, comeTxt.trim());
+  }
+}
+
+// House edge calculation for active bets
+function calculateBetEdge(): string | null {
+  if (GM.bets.length === 0) return null;
+  const EDGES: Partial<Record<BetType, number>> = {
+    pass: 1.41, dontpass: 1.36, come: 1.41, dontcome: 1.36,
+    field: 5.56, place4: 6.67, place5: 4.0, place6: 1.52,
+    place8: 1.52, place9: 4.0, place10: 6.67,
+    hard4: 11.11, hard6: 9.09, hard8: 9.09, hard10: 11.11,
+    anyseven: 16.67, anycraps: 11.11, yo: 11.11, aces: 13.89, boxcars: 13.89,
+    odds_pass: 0, odds_dontpass: 0, big6: 9.09, big8: 9.09,
+  };
+  let totalBet = 0;
+  let weightedEdge = 0;
+  for (const bet of GM.bets) {
+    const edge = EDGES[bet.type] ?? 5;
+    totalBet += bet.amount;
+    weightedEdge += edge * bet.amount;
+  }
+  if (totalBet === 0) return null;
+  return (weightedEdge / totalBet).toFixed(1);
 }
 
 function updateHistoryPanel() {
@@ -1632,6 +1773,11 @@ class CrapsUISystem extends createSystem({
     // ── Title ──
     this.queries.title.subscribe('qualify', (entity: Entity) => {
       const doc = getDoc(entity); if (!doc) return;
+      // Update level display
+      const levelTitles = ['Beginner', 'Novice', 'Regular', 'Experienced', 'Skilled', 'Advanced', 'Expert', 'Veteran', 'Master', 'Grand Master', 'Legend'];
+      const titleIdx = Math.min(Math.floor(GM.level / 5), levelTitles.length - 1);
+      setText(entity, 'level-display', `Level ${GM.level} - ${levelTitles[titleIdx]}`);
+      setText(entity, 'career-rolls', `Career Rolls: ${GM.career.totalRolls}`);
       wire(doc, 'btn-play', () => { audio.playSfx('click'); GM.state = 'mode'; });
       wire(doc, 'btn-scores', () => { audio.playSfx('click'); GM.state = 'leaderboard'; updateLeaderboardPanel(); });
       wire(doc, 'btn-achievements', () => { audio.playSfx('click'); GM.state = 'achievements'; updateAchievementsPanel(); });
@@ -1689,6 +1835,43 @@ class CrapsUISystem extends createSystem({
       });
       wire(doc, 'btn-roll', () => { throwDice(); });
       wire(doc, 'btn-clear', () => { audio.playSfx('bet_clear'); GM.clearBets(); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      // Strategy presets
+      wire(doc, 'btn-preset-iron', () => {
+        audio.playSfx('bet_place');
+        GM.clearBets();
+        GM.addBet('field', GM.chipSize);
+        GM.addBet('place5', GM.chipSize);
+        GM.addBet('place6', GM.chipSize);
+        GM.addBet('place8', GM.chipSize);
+        GM.career.presetsUsed++;
+        if (GM.unlock('preset_user')) GM.toastQueue.push('Achievement: Strategist!');
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      });
+      wire(doc, 'btn-preset-conservative', () => {
+        audio.playSfx('bet_place');
+        GM.clearBets();
+        GM.addBet('pass', GM.chipSize);
+        if (GM.phase === 'point') GM.addBet('odds_pass', GM.chipSize * 2);
+        GM.career.presetsUsed++;
+        if (GM.unlock('preset_user')) GM.toastQueue.push('Achievement: Strategist!');
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      });
+      wire(doc, 'btn-preset-dark', () => {
+        audio.playSfx('bet_place');
+        GM.clearBets();
+        GM.addBet('dontpass', GM.chipSize);
+        if (GM.phase === 'point') GM.addBet('odds_dontpass', GM.chipSize * 2);
+        GM.career.presetsUsed++;
+        if (GM.unlock('preset_user')) GM.toastQueue.push('Achievement: Strategist!');
+        updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      });
+      wire(doc, 'btn-repeat', () => {
+        if (GM.lastBets.length > 0) {
+          audio.playSfx('bet_place');
+          GM.bets = GM.lastBets.map(b => ({ ...b }));
+          updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+        }
+      });
     });
 
     // ── Result ──
@@ -1787,10 +1970,47 @@ class CrapsUISystem extends createSystem({
 class CrapsGameSystem extends createSystem({}) {
   private countdownTimer = 0;
   private streakFireTimer = 0;
+  private diceTrailTimer = 0;
+  private puckPulsePhase = 0;
 
   update(delta: number, time: number) {
     // Dice physics
     updateDicePhysics(delta);
+
+    // Dice trail particles during throw
+    if (GM.diceAnimating) {
+      this.diceTrailTimer += delta;
+      if (this.diceTrailTimer > 0.03) {
+        this.diceTrailTimer = 0;
+        const skin = DICE_SKINS[GM.currentSkin];
+        const trailColor = parseInt(skin.glow.replace('#', ''), 16);
+        for (const d of dice) {
+          if (!d.settled) {
+            const p = particles.find(pp => pp.life <= 0);
+            if (p) {
+              p.mesh.position.copy(d.mesh.position);
+              p.vel.set((Math.random() - 0.5) * 0.3, -0.2, (Math.random() - 0.5) * 0.3);
+              p.life = 0.25 + Math.random() * 0.15;
+              p.maxLife = p.life;
+              (p.mesh.material as MeshStandardMaterial).color.set(trailColor);
+              (p.mesh.material as MeshStandardMaterial).emissive.set(trailColor);
+              p.mesh.visible = true;
+            }
+          }
+        }
+      }
+    } else {
+      this.diceTrailTimer = 0;
+    }
+
+    // Animated puck pulse
+    if (puckMesh && GM.phase === 'point') {
+      this.puckPulsePhase += delta * 3;
+      const pulse = 0.3 + Math.sin(this.puckPulsePhase) * 0.2;
+      (puckMesh.material as MeshStandardMaterial).emissiveIntensity = pulse;
+      // Bob the puck slightly
+      puckMesh.position.y = TABLE_Y + 0.03 + Math.sin(this.puckPulsePhase * 0.5) * 0.005;
+    }
 
     // Particles
     for (const p of particles) {

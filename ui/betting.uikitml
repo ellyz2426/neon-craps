@@ -19,6 +19,12 @@
     <text name="btn-prop" fontSize="10" color="#8888ff" backgroundColor="#222244" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#444466">Props</text>
     <text name="btn-odds" fontSize="10" color="#ffffff" backgroundColor="#333333" padding="3" paddingLeft="6" paddingRight="6" borderRadius="3" cursor="pointer" hover-backgroundColor="#555555">Odds</text>
   </container>
+  <container flexDirection="row" gap="3">
+    <text name="btn-preset-iron" fontSize="9" color="#ffaa00" backgroundColor="#332200" padding="2" paddingLeft="5" paddingRight="5" borderRadius="3" cursor="pointer" hover-backgroundColor="#554400">Iron Cross</text>
+    <text name="btn-preset-conservative" fontSize="9" color="#44ff44" backgroundColor="#002200" padding="2" paddingLeft="5" paddingRight="5" borderRadius="3" cursor="pointer" hover-backgroundColor="#004400">Conservative</text>
+    <text name="btn-preset-dark" fontSize="9" color="#ff4488" backgroundColor="#330022" padding="2" paddingLeft="5" paddingRight="5" borderRadius="3" cursor="pointer" hover-backgroundColor="#550044">Dark Side</text>
+    <text name="btn-repeat" fontSize="9" color="#aaaaff" backgroundColor="#222244" padding="2" paddingLeft="5" paddingRight="5" borderRadius="3" cursor="pointer" hover-backgroundColor="#444466">Repeat</text>
+  </container>
   <container flexDirection="row" gap="6">
     <text name="btn-roll" fontSize="14" fontWeight="bold" color="#00ff00" backgroundColor="#004400" padding="5" paddingLeft="14" paddingRight="14" borderRadius="4" cursor="pointer" hover-backgroundColor="#006600">ROLL DICE</text>
     <text name="btn-clear" fontSize="12" color="#ff4444" backgroundColor="#330000" padding="4" paddingLeft="10" paddingRight="10" borderRadius="4" cursor="pointer" hover-backgroundColor="#550000">Clear</text>

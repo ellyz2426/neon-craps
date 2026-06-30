@@ -52,15 +52,113 @@
         "dataUid": "uid-5"
       },
       {
-        "sourceTag": "text",
+        "sourceTag": "container",
         "type": "custom",
         "children": [
-          "Rolls: 0"
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Rolls: 0"
+                ],
+                "properties": {
+                  "name": "final-rolls",
+                  "fontsize": "12",
+                  "color": "#ffffff"
+                },
+                "dataUid": "uid-8"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Won: $0"
+                ],
+                "properties": {
+                  "name": "final-won",
+                  "fontsize": "12",
+                  "color": "#44ff44"
+                },
+                "dataUid": "uid-9"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Lost: $0"
+                ],
+                "properties": {
+                  "name": "final-lost",
+                  "fontsize": "12",
+                  "color": "#ff4444"
+                },
+                "dataUid": "uid-10"
+              }
+            ],
+            "properties": {
+              "flexdirection": "column",
+              "gap": "2"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "container",
+            "type": "custom",
+            "children": [
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Best Streak: 0"
+                ],
+                "properties": {
+                  "name": "final-streak",
+                  "fontsize": "12",
+                  "color": "#ffaa00"
+                },
+                "dataUid": "uid-12"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Seven-Outs: 0"
+                ],
+                "properties": {
+                  "name": "final-sevens",
+                  "fontsize": "12",
+                  "color": "#ff8800"
+                },
+                "dataUid": "uid-13"
+              },
+              {
+                "sourceTag": "text",
+                "type": "custom",
+                "children": [
+                  "Time: 0m"
+                ],
+                "properties": {
+                  "name": "final-time",
+                  "fontsize": "12",
+                  "color": "#aaaaaa"
+                },
+                "dataUid": "uid-14"
+              }
+            ],
+            "properties": {
+              "flexdirection": "column",
+              "gap": "2"
+            },
+            "dataUid": "uid-11"
+          }
         ],
         "properties": {
-          "name": "final-rolls",
-          "fontsize": "12",
-          "color": "#ffffff"
+          "flexdirection": "row",
+          "gap": "12"
         },
         "dataUid": "uid-6"
       },
@@ -68,53 +166,28 @@
         "sourceTag": "text",
         "type": "custom",
         "children": [
-          "Won: $0"
+          "Net: $0"
         ],
         "properties": {
-          "name": "final-won",
-          "fontsize": "12",
-          "color": "#44ff44"
+          "name": "final-net",
+          "fontsize": "14",
+          "fontweight": "bold",
+          "color": "#ffffff"
         },
-        "dataUid": "uid-7"
+        "dataUid": "uid-15"
       },
       {
         "sourceTag": "text",
         "type": "custom",
         "children": [
-          "Lost: $0"
+          "ROI: 0%"
         ],
         "properties": {
-          "name": "final-lost",
-          "fontsize": "12",
-          "color": "#ff4444"
+          "name": "final-roi",
+          "fontsize": "11",
+          "color": "#888888"
         },
-        "dataUid": "uid-8"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Best Streak: 0"
-        ],
-        "properties": {
-          "name": "final-streak",
-          "fontsize": "12",
-          "color": "#ffaa00"
-        },
-        "dataUid": "uid-9"
-      },
-      {
-        "sourceTag": "text",
-        "type": "custom",
-        "children": [
-          "Seven-Outs: 0"
-        ],
-        "properties": {
-          "name": "final-sevens",
-          "fontsize": "12",
-          "color": "#ff8800"
-        },
-        "dataUid": "uid-10"
+        "dataUid": "uid-16"
       },
       {
         "sourceTag": "container",
@@ -123,7 +196,7 @@
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-11"
+        "dataUid": "uid-17"
       },
       {
         "sourceTag": "text",
@@ -143,7 +216,7 @@
           "cursor": "pointer",
           "hoverBackgroundcolor": "#005555"
         },
-        "dataUid": "uid-12"
+        "dataUid": "uid-18"
       },
       {
         "sourceTag": "text",
@@ -163,7 +236,7 @@
           "cursor": "pointer",
           "hoverBackgroundcolor": "#444444"
         },
-        "dataUid": "uid-13"
+        "dataUid": "uid-19"
       }
     ],
     "properties": {
@@ -185,7 +258,7 @@
         "column": 0
       },
       "end": {
-        "line": 13,
+        "line": 22,
         "column": 12
       }
     },
@@ -235,77 +308,137 @@
         "column": 2
       },
       "end": {
-        "line": 5,
-        "column": 72
+        "line": 16,
+        "column": 14
       }
     },
     "uid-7": {
       "start": {
         "line": 6,
-        "column": 2
+        "column": 4
       },
       "end": {
-        "line": 6,
-        "column": 69
+        "line": 10,
+        "column": 16
       }
     },
     "uid-8": {
       "start": {
         "line": 7,
-        "column": 2
+        "column": 6
       },
       "end": {
         "line": 7,
-        "column": 71
+        "column": 76
       }
     },
     "uid-9": {
       "start": {
         "line": 8,
-        "column": 2
+        "column": 6
       },
       "end": {
         "line": 8,
-        "column": 79
+        "column": 73
       }
     },
     "uid-10": {
       "start": {
         "line": 9,
-        "column": 2
+        "column": 6
       },
       "end": {
         "line": 9,
-        "column": 78
+        "column": 75
       }
     },
     "uid-11": {
       "start": {
-        "line": 10,
-        "column": 2
+        "line": 11,
+        "column": 4
       },
       "end": {
-        "line": 10,
-        "column": 36
+        "line": 15,
+        "column": 16
       }
     },
     "uid-12": {
       "start": {
-        "line": 11,
-        "column": 2
+        "line": 12,
+        "column": 6
       },
       "end": {
-        "line": 11,
-        "column": 210
+        "line": 12,
+        "column": 83
       }
     },
     "uid-13": {
       "start": {
-        "line": 12,
+        "line": 13,
+        "column": 6
+      },
+      "end": {
+        "line": 13,
+        "column": 82
+      }
+    },
+    "uid-14": {
+      "start": {
+        "line": 14,
+        "column": 6
+      },
+      "end": {
+        "line": 14,
+        "column": 75
+      }
+    },
+    "uid-15": {
+      "start": {
+        "line": 17,
         "column": 2
       },
       "end": {
-        "line": 12,
+        "line": 17,
+        "column": 87
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 18,
+        "column": 2
+      },
+      "end": {
+        "line": 18,
+        "column": 69
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 19,
+        "column": 2
+      },
+      "end": {
+        "line": 19,
+        "column": 36
+      }
+    },
+    "uid-18": {
+      "start": {
+        "line": 20,
+        "column": 2
+      },
+      "end": {
+        "line": 20,
+        "column": 210
+      }
+    },
+    "uid-19": {
+      "start": {
+        "line": 21,
+        "column": 2
+      },
+      "end": {
+        "line": 21,
         "column": 204
       }
     }

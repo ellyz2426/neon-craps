@@ -199,13 +199,53 @@
         "dataUid": "uid-12"
       },
       {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "ANALYTICS"
+        ],
+        "properties": {
+          "name": "btn-analytics",
+          "fontsize": "16",
+          "color": "#00dddd",
+          "backgroundcolor": "#002222",
+          "padding": "6",
+          "paddingleft": "20",
+          "paddingright": "20",
+          "borderradius": "4",
+          "cursor": "pointer",
+          "hoverBackgroundcolor": "#004444"
+        },
+        "dataUid": "uid-13"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "VIP LOUNGE"
+        ],
+        "properties": {
+          "name": "btn-vip",
+          "fontsize": "16",
+          "color": "#ffaa00",
+          "backgroundcolor": "#332200",
+          "padding": "6",
+          "paddingleft": "20",
+          "paddingright": "20",
+          "borderradius": "4",
+          "cursor": "pointer",
+          "hoverBackgroundcolor": "#554400"
+        },
+        "dataUid": "uid-14"
+      },
+      {
         "sourceTag": "container",
         "type": "custom",
         "children": [],
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-13"
+        "dataUid": "uid-15"
       },
       {
         "sourceTag": "text",
@@ -218,7 +258,7 @@
           "fontsize": "10",
           "color": "#666666"
         },
-        "dataUid": "uid-14"
+        "dataUid": "uid-16"
       },
       {
         "sourceTag": "text",
@@ -231,7 +271,7 @@
           "fontsize": "9",
           "color": "#444444"
         },
-        "dataUid": "uid-15"
+        "dataUid": "uid-17"
       }
     ],
     "properties": {
@@ -250,7 +290,7 @@
         "column": 0
       },
       "end": {
-        "line": 15,
+        "line": 17,
         "column": 12
       }
     },
@@ -371,7 +411,7 @@
       },
       "end": {
         "line": 12,
-        "column": 36
+        "column": 214
       }
     },
     "uid-14": {
@@ -381,7 +421,7 @@
       },
       "end": {
         "line": 13,
-        "column": 84
+        "column": 209
       }
     },
     "uid-15": {
@@ -391,6 +431,26 @@
       },
       "end": {
         "line": 14,
+        "column": 36
+      }
+    },
+    "uid-16": {
+      "start": {
+        "line": 15,
+        "column": 2
+      },
+      "end": {
+        "line": 15,
+        "column": 84
+      }
+    },
+    "uid-17": {
+      "start": {
+        "line": 16,
+        "column": 2
+      },
+      "end": {
+        "line": 16,
         "column": 79
       }
     }

@@ -1,0 +1,49 @@
+<panel>
+  <style>
+    .root { flex-direction: column; padding: 12; gap: 6; align-items: center; width: 380; background-color: rgba(0,20,20,0.92); border-radius: 8; border-width: 1; border-color: #00cccc; }
+    .title { color: #00ffff; font-size: 16; font-weight: bold; }
+    .subtitle { color: #00aaaa; font-size: 10; }
+    .row { flex-direction: row; width: 360; justify-content: space-between; padding-left: 4; padding-right: 4; }
+    .label { color: #cccccc; font-size: 9; width: 100; }
+    .stat { color: #ffffff; font-size: 9; width: 60; text-align: center; }
+    .win { color: #44ff44; font-size: 9; width: 50; text-align: center; }
+    .loss { color: #ff4444; font-size: 9; width: 50; text-align: center; }
+    .net { color: #ffff00; font-size: 9; width: 60; text-align: center; }
+    .sep { width: 350; height: 1; background-color: #004444; }
+    .header { flex-direction: row; width: 360; justify-content: space-between; padding-left: 4; padding-right: 4; }
+    .htext { color: #00aaaa; font-size: 8; font-weight: bold; }
+    .hw1 { color: #00aaaa; font-size: 8; width: 100; }
+    .hw2 { color: #00aaaa; font-size: 8; width: 60; text-align: center; }
+    .hw3 { color: #00aaaa; font-size: 8; width: 50; text-align: center; }
+    .hw4 { color: #00aaaa; font-size: 8; width: 50; text-align: center; }
+    .hw5 { color: #00aaaa; font-size: 8; width: 60; text-align: center; }
+    .summary { color: #ffff00; font-size: 10; }
+    .btn { background-color: #004444; padding: 6; border-radius: 4; border-width: 1; border-color: #00aaaa; margin-top: 4; }
+    .btntext { color: #00ffff; font-size: 10; text-align: center; }
+  </style>
+  <container class="root">
+    <text class="title">BETTING ANALYTICS</text>
+    <text class="subtitle" id="analytics-subtitle">Session Performance</text>
+    <container class="sep"></container>
+    <container class="header">
+      <text class="hw1">BET TYPE</text>
+      <text class="hw2">PLACED</text>
+      <text class="hw3">WON</text>
+      <text class="hw4">LOST</text>
+      <text class="hw5">NET</text>
+    </container>
+    <container class="sep"></container>
+    <container class="row"><text class="label" id="an-1">--</text><text class="stat" id="an-1c">-</text><text class="win" id="an-1w">-</text><text class="loss" id="an-1l">-</text><text class="net" id="an-1n">-</text></container>
+    <container class="row"><text class="label" id="an-2">--</text><text class="stat" id="an-2c">-</text><text class="win" id="an-2w">-</text><text class="loss" id="an-2l">-</text><text class="net" id="an-2n">-</text></container>
+    <container class="row"><text class="label" id="an-3">--</text><text class="stat" id="an-3c">-</text><text class="win" id="an-3w">-</text><text class="loss" id="an-3l">-</text><text class="net" id="an-3n">-</text></container>
+    <container class="row"><text class="label" id="an-4">--</text><text class="stat" id="an-4c">-</text><text class="win" id="an-4w">-</text><text class="loss" id="an-4l">-</text><text class="net" id="an-4n">-</text></container>
+    <container class="row"><text class="label" id="an-5">--</text><text class="stat" id="an-5c">-</text><text class="win" id="an-5w">-</text><text class="loss" id="an-5l">-</text><text class="net" id="an-5n">-</text></container>
+    <container class="row"><text class="label" id="an-6">--</text><text class="stat" id="an-6c">-</text><text class="win" id="an-6w">-</text><text class="loss" id="an-6l">-</text><text class="net" id="an-6n">-</text></container>
+    <container class="row"><text class="label" id="an-7">--</text><text class="stat" id="an-7c">-</text><text class="win" id="an-7w">-</text><text class="loss" id="an-7l">-</text><text class="net" id="an-7n">-</text></container>
+    <container class="row"><text class="label" id="an-8">--</text><text class="stat" id="an-8c">-</text><text class="win" id="an-8w">-</text><text class="loss" id="an-8l">-</text><text class="net" id="an-8n">-</text></container>
+    <container class="sep"></container>
+    <text class="summary" id="analytics-best">Best: --</text>
+    <text class="summary" id="analytics-worst">Worst: --</text>
+    <container class="btn" id="btn-back"><text class="btntext">BACK</text></container>
+  </container>
+</panel>

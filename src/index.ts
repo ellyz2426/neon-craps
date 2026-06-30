@@ -44,7 +44,7 @@ import {
 // ============================================================
 // GAME CONSTANTS & TYPES
 // ============================================================
-type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts' | 'strategy';
+type GameState = 'title' | 'mode' | 'difficulty' | 'countdown' | 'betting' | 'rolling' | 'result' | 'pause' | 'gameover' | 'leaderboard' | 'achievements' | 'stats' | 'settings' | 'help' | 'skins' | 'history' | 'bets' | 'payouts' | 'strategy' | 'analytics' | 'vip';
 type GameMode = 'classic' | 'speed' | 'practice' | 'highroller' | 'daily' | 'session' | 'marathon' | 'tutorial';
 type CrapsPhase = 'comeout' | 'point';
 type BetType = 'pass' | 'dontpass' | 'come' | 'dontcome' | 'field' | 'place4' | 'place5' | 'place6' | 'place8' | 'place9' | 'place10' | 'hard4' | 'hard6' | 'hard8' | 'hard10' | 'anyseven' | 'anycraps' | 'yo' | 'aces' | 'boxcars' | 'odds_pass' | 'odds_dontpass' | 'big6' | 'big8';
@@ -52,6 +52,15 @@ type BetType = 'pass' | 'dontpass' | 'come' | 'dontcome' | 'field' | 'place4' | 
 interface Bet { type: BetType; amount: number; }
 interface RollResult { die1: number; die2: number; total: number; }
 interface Achievement { id: string; name: string; desc: string; unlocked: boolean; }
+interface BetAnalytics { placed: number; won: number; lost: number; totalWagered: number; totalPaid: number; }
+
+const VIP_LEVELS = [
+  { name: 'Bronze', min: 0, maxBet: 100, perk: 'Welcome to the table' },
+  { name: 'Silver', min: 100, maxBet: 250, perk: 'Table max: $250' },
+  { name: 'Gold', min: 500, maxBet: 500, perk: 'Table max: $500' },
+  { name: 'Platinum', min: 2000, maxBet: 1000, perk: 'Table max: $1000' },
+  { name: 'Diamond', min: 10000, maxBet: 5000, perk: 'Table max: $5000' },
+];
 
 const THEMES = [
   { name: 'Neon Holodeck', grid: '#004444', accent: '#00ffff', bg: '#000a0a', fog: '#001111', wall: '#003333', table: '#003322', felt: '#004433', puck: '#ffff00' },
@@ -123,6 +132,14 @@ class GameStateManager {
   themesUsed: Set<number> = new Set();
   comePoints: Map<number, number> = new Map(); // point -> bet amount for come bets on point
   dontComePoints: Map<number, number> = new Map(); // point -> bet amount for don't come on point
+  autoRoll: boolean = false;
+  autoRollDelay: number = 2; // seconds between auto-rolls
+  dealerCall: string = 'PLACE YOUR BETS!';
+  dealerSub: string = '';
+  dealerDetail: string = '';
+  dealerTimer: number = 0;
+  betAnalytics: Map<BetType, BetAnalytics> = new Map();
+  uniqueBetsThisSession: Set<string> = new Set();
 
   // Career stats (persisted)
   career = {
@@ -131,6 +148,7 @@ class GameStateManager {
     craps: 0, pointsMade: 0, hardwaysHit: 0, playTime: 0,
     propWins: 0, comeWins: 0, lowestBank: 99999,
     ironCrossWins: 0, darkSideWins: 0, presetsUsed: 0,
+    compPoints: 0, totalWagered: 0, vipLevel: 0,
   };
 
   constructor() {
@@ -209,6 +227,27 @@ class GameStateManager {
       { id: 'streak_20', name: 'Legendary Run', desc: 'Win 20 rolls in a row', unlocked: false },
       { id: 'all_bets', name: 'Full Table', desc: 'Place 10+ different bet types in one session', unlocked: false },
       { id: 'quick_double', name: 'Fast Fortune', desc: 'Double bankroll in under 10 rolls', unlocked: false },
+      // ── Round 4 achievements (70-89) ──
+      { id: 'vip_silver', name: 'VIP Silver', desc: 'Reach Silver VIP status', unlocked: false },
+      { id: 'vip_gold', name: 'VIP Gold', desc: 'Reach Gold VIP status', unlocked: false },
+      { id: 'vip_platinum', name: 'VIP Platinum', desc: 'Reach Platinum VIP status', unlocked: false },
+      { id: 'vip_diamond', name: 'VIP Diamond', desc: 'Reach Diamond VIP status', unlocked: false },
+      { id: 'ten_different', name: 'Diversified', desc: 'Place 10 different bet types in career', unlocked: false },
+      { id: 'auto_roller', name: 'Auto Pilot', desc: 'Win 5 in a row with auto-roll on', unlocked: false },
+      { id: 'dealer_fav', name: 'Dealer Favorite', desc: 'Win 3 naturals in one session', unlocked: false },
+      { id: 'midnight_1000', name: 'Midnight Jackpot', desc: 'Win $1000+ on a single midnight bet', unlocked: false },
+      { id: 'craps_survivor', name: 'Craps Survivor', desc: 'Survive 5 craps rolls without going broke', unlocked: false },
+      { id: 'bet_big_win', name: 'High Stakes Win', desc: 'Win with a $100+ bet', unlocked: false },
+      { id: 'seven_master', name: 'Seven Master', desc: 'Win on Any Seven 3 times', unlocked: false },
+      { id: 'hardway_sweep', name: 'Hardway Sweep', desc: 'Hit all 4 hardways in one session', unlocked: false },
+      { id: 'lucky_7', name: 'Lucky 7', desc: 'Roll exactly 7 sevens in a session', unlocked: false },
+      { id: 'bankroll_50k', name: 'Tycoon', desc: 'Reach $50000 bankroll', unlocked: false },
+      { id: 'roll_streak_no_loss', name: 'Untouchable', desc: '20 rolls without losing a bet', unlocked: false },
+      { id: 'place_sweep', name: 'Place Sweep', desc: 'Win on all 6 place numbers', unlocked: false },
+      { id: 'comp_collector', name: 'Comp Collector', desc: 'Earn 500 comp points', unlocked: false },
+      { id: 'marathon_100', name: 'Century', desc: '100 rolls in one game', unlocked: false },
+      { id: 'level_100', name: 'Grandmaster', desc: 'Reach level 100', unlocked: false },
+      { id: 'profit_10k', name: 'Ten Grand', desc: 'Net profit of $10000 in one session', unlocked: false },
     ];
   }
 
@@ -222,6 +261,7 @@ class GameStateManager {
       localStorage.setItem('neoncraps_theme', String(this.currentTheme));
       localStorage.setItem('neoncraps_vol', JSON.stringify({ master: this.masterVol, sfx: this.sfxVol, music: this.musicVol }));
       localStorage.setItem('neoncraps_modes', JSON.stringify([...this.modesPlayed]));
+      localStorage.setItem('neoncraps_autoroll', GM.autoRoll ? '1' : '0');
     } catch {}
   }
 
@@ -243,6 +283,8 @@ class GameStateManager {
       if (vol) { const v = JSON.parse(vol); this.masterVol = v.master; this.sfxVol = v.sfx; this.musicVol = v.music; }
       const modes = localStorage.getItem('neoncraps_modes');
       if (modes) this.modesPlayed = new Set(JSON.parse(modes));
+      const ar = localStorage.getItem('neoncraps_autoroll');
+      if (ar) this.autoRoll = ar === '1';
     } catch {}
   }
 
@@ -262,11 +304,36 @@ class GameStateManager {
   getTotalBet(): number { return this.bets.reduce((s, b) => s + b.amount, 0); }
 
   addBet(type: BetType, amount: number) {
+    const maxBet = VIP_LEVELS[Math.min(this.career.vipLevel, VIP_LEVELS.length - 1)].maxBet;
+    if (amount > maxBet) amount = maxBet;
     if (amount > this.bankroll - this.getTotalBet()) return;
     const existing = this.bets.find(b => b.type === type);
     if (existing) existing.amount += amount;
     else this.bets.push({ type, amount });
     if (amount >= 100) { if (this.unlock('max_bet')) this.toastQueue.push('Achievement: All In!'); }
+    this.uniqueBetsThisSession.add(type);
+    // Track analytics
+    if (!this.betAnalytics.has(type)) this.betAnalytics.set(type, { placed: 0, won: 0, lost: 0, totalWagered: 0, totalPaid: 0 });
+    const an = this.betAnalytics.get(type)!;
+    an.placed++;
+    an.totalWagered += amount;
+    // Earn comp points (1 per $10 wagered)
+    const compEarned = Math.floor(amount / 10);
+    if (compEarned > 0) {
+      this.career.compPoints += compEarned;
+      this.career.totalWagered += amount;
+      // Check VIP level ups
+      const newLevel = VIP_LEVELS.findIndex((l, i) => i === VIP_LEVELS.length - 1 || this.career.compPoints < VIP_LEVELS[i + 1].min);
+      if (newLevel > this.career.vipLevel) {
+        this.career.vipLevel = newLevel;
+        this.toastQueue.push(`VIP Level Up: ${VIP_LEVELS[newLevel].name}!`);
+        if (newLevel >= 1) this.unlock('vip_silver');
+        if (newLevel >= 2) this.unlock('vip_gold');
+        if (newLevel >= 3) this.unlock('vip_platinum');
+        if (newLevel >= 4) this.unlock('vip_diamond');
+      }
+      this.save();
+    }
   }
 
   clearBets() { this.bets = []; }
@@ -555,11 +622,19 @@ function resolveBets(roll: RollResult): { totalPayout: number; messages: string[
     if (payout > 0) {
       totalPayout += payout;
       messages.push(`${bet.type}: +$${payout}`);
+      // Track analytics win
+      if (!GM.betAnalytics.has(bet.type)) GM.betAnalytics.set(bet.type, { placed: 0, won: 0, lost: 0, totalWagered: 0, totalPaid: 0 });
+      const an = GM.betAnalytics.get(bet.type)!;
+      an.won++;
+      an.totalPaid += payout;
     }
     if (lost) {
       GM.totalLost += bet.amount;
       GM.career.totalLost += bet.amount;
       messages.push(`${bet.type}: -$${bet.amount}`);
+      // Track analytics loss
+      if (!GM.betAnalytics.has(bet.type)) GM.betAnalytics.set(bet.type, { placed: 0, won: 0, lost: 0, totalWagered: 0, totalPaid: 0 });
+      GM.betAnalytics.get(bet.type)!.lost++;
     }
     if (remove) betsToRemove.push(bet.type);
   }
@@ -663,14 +738,28 @@ function processRoll(roll: RollResult) {
       GM.naturals++;
       GM.career.naturals++;
       if (GM.unlock('natural')) GM.toastQueue.push('Achievement: Natural!');
+      // Dealer callout
+      GM.dealerCall = total === 7 ? 'SEVEN! WINNER!' : 'YO ELEVEN! WINNER!';
+      GM.dealerSub = 'Natural - Pass line wins';
+      GM.dealerDetail = `Pay the line. ${result.totalPayout > 0 ? '+$' + result.totalPayout : ''}`;
+      GM.dealerTimer = 3;
     } else if (total === 2 || total === 3 || total === 12) {
       GM.craps++;
       GM.career.craps++;
+      const names: Record<number, string> = { 2: 'ACES! CRAPS!', 3: 'ACE-DEUCE! CRAPS!', 12: 'BOXCARS! CRAPS!' };
+      GM.dealerCall = names[total] || 'CRAPS!';
+      GM.dealerSub = 'Craps - Pass line loses';
+      GM.dealerDetail = total === 12 ? 'Don\'t Pass bar' : 'Don\'t Pass wins';
+      GM.dealerTimer = 3;
     } else {
       // Point established
       GM.point = total;
       GM.phase = 'point';
       audio.playSfx('point_set');
+      GM.dealerCall = `POINT IS ${total}!`;
+      GM.dealerSub = 'Mark the point';
+      GM.dealerDetail = `Puck ON - ${total === 6 || total === 8 ? 'Easy number' : total === 4 || total === 10 ? 'Hard number' : 'Outside number'}`;
+      GM.dealerTimer = 3;
     }
   } else {
     // Point phase
@@ -681,6 +770,10 @@ function processRoll(roll: RollResult) {
       GM.point = 0;
       if (GM.unlock('point_made')) GM.toastQueue.push('Achievement: Point Made!');
       audio.playSfx('point_made');
+      GM.dealerCall = `${total}! POINT MADE!`;
+      GM.dealerSub = 'Winner! Pass line pays';
+      GM.dealerDetail = `New come-out roll. ${result.totalPayout > 0 ? '+$' + result.totalPayout : ''}`;
+      GM.dealerTimer = 3;
     } else if (total === 7) {
       GM.sevenOuts++;
       GM.career.sevenOuts++;
@@ -691,6 +784,17 @@ function processRoll(roll: RollResult) {
       // Come/don't come points already resolved in resolveBets
       if (GM.unlock('seven_out')) GM.toastQueue.push('Achievement: Seven Out!');
       audio.playSfx('seven_out');
+      GM.dealerCall = 'SEVEN OUT!';
+      GM.dealerSub = 'Line away! Pay the Don\'ts';
+      GM.dealerDetail = 'New shooter, new come-out roll';
+      GM.dealerTimer = 3;
+    } else {
+      // Non-resolving point-phase roll
+      const isHardRoll = die1 === die2;
+      GM.dealerCall = `${total}${isHardRoll ? ' THE HARD WAY!' : ''}`;
+      GM.dealerSub = `Point is still ${GM.point}`;
+      GM.dealerDetail = result.totalPayout > 0 ? `Winner! +$${result.totalPayout}` : '';
+      GM.dealerTimer = 2.5;
     }
   }
 
@@ -784,6 +888,48 @@ function processRoll(roll: RollResult) {
   if (GM.career.darkSideWins >= 3) { if (GM.unlock('dark_side_3')) GM.toastQueue.push('Achievement: Dark Rider!'); }
   // Iron cross wins
   if (GM.career.ironCrossWins >= 3) { if (GM.unlock('iron_cross_win')) GM.toastQueue.push('Achievement: Cross Victory!'); }
+
+  // ── Round 4 achievement checks ──
+  // VIP achievements already checked in addBet
+  // Diversified — 10 unique bet types used ever
+  if (GM.uniqueBetsThisSession.size >= 10) { if (GM.unlock('ten_different')) GM.toastQueue.push('Achievement: Diversified!'); }
+  // Auto-roll streak
+  if (GM.autoRoll && GM.winStreak >= 5) { if (GM.unlock('auto_roller')) GM.toastQueue.push('Achievement: Auto Pilot!'); }
+  // Dealer favorite — 3 naturals in session
+  if (GM.naturals >= 3) { if (GM.unlock('dealer_fav')) GM.toastQueue.push('Achievement: Dealer Favorite!'); }
+  // Midnight jackpot — $1000+ on single midnight (field bet on 12 pays 3x)
+  if (total === 12 && GM.lastBets.some(b => b.type === 'field' && b.amount * 3 >= 1000)) {
+    if (GM.unlock('midnight_1000')) GM.toastQueue.push('Achievement: Midnight Jackpot!');
+  }
+  // Craps survivor — 5 craps without going broke
+  if (GM.craps >= 5 && GM.bankroll > 0) { if (GM.unlock('craps_survivor')) GM.toastQueue.push('Achievement: Craps Survivor!'); }
+  // High stakes win — win with $100+ bet
+  if (result.totalPayout > 0 && GM.lastBets.some(b => b.amount >= 100)) {
+    if (GM.unlock('bet_big_win')) GM.toastQueue.push('Achievement: High Stakes Win!');
+  }
+  // Seven master — track any-seven wins
+  const anySvnAnalytics = GM.betAnalytics.get('anyseven');
+  if (anySvnAnalytics && anySvnAnalytics.won >= 3) { if (GM.unlock('seven_master')) GM.toastQueue.push('Achievement: Seven Master!'); }
+  // Hardway sweep — all 4 hardways hit this session
+  if (GM.hardwaysHit >= 4) {
+    const hitTypes = new Set<number>();
+    // Check from roll history
+    for (const r of GM.rollHistory) { if (r.die1 === r.die2 && [4, 6, 8, 10].includes(r.total)) hitTypes.add(r.total); }
+    if (hitTypes.size >= 4) { if (GM.unlock('hardway_sweep')) GM.toastQueue.push('Achievement: Hardway Sweep!'); }
+  }
+  // Lucky 7 — exactly 7 sevens
+  const sevenCount = GM.numberCounts.get(7) || 0;
+  if (sevenCount === 7) { if (GM.unlock('lucky_7')) GM.toastQueue.push('Achievement: Lucky 7!'); }
+  // Tycoon
+  if (GM.bankroll >= 50000) { if (GM.unlock('bankroll_50k')) GM.toastQueue.push('Achievement: Tycoon!'); }
+  // Comp collector
+  if (GM.career.compPoints >= 500) { if (GM.unlock('comp_collector')) GM.toastQueue.push('Achievement: Comp Collector!'); }
+  // Century rolls
+  if (GM.rollCount >= 100) { if (GM.unlock('marathon_100')) GM.toastQueue.push('Achievement: Century!'); }
+  // Grandmaster
+  if (GM.level >= 100) { if (GM.unlock('level_100')) GM.toastQueue.push('Achievement: Grandmaster!'); }
+  // Ten Grand net profit
+  if (GM.bankroll - GM.startBankroll >= 10000) { if (GM.unlock('profit_10k')) GM.toastQueue.push('Achievement: Ten Grand!'); }
 
   // XP
   GM.addXp(Math.floor(result.totalPayout / 10) + 5);
@@ -1634,6 +1780,72 @@ function updateHotColdPanel() {
   setText(e, 'seven-ratio', `7s: ${sevens}/${totalRolls} (${pct}%)`);
 }
 
+function updateAnalyticsPanel() {
+  const e = panelEntities.get('analytics');
+  if (!e) return;
+
+  // Sort bet analytics by total wagered (descending)
+  const entries = Array.from(GM.betAnalytics.entries())
+    .sort((a, b) => b[1].totalWagered - a[1].totalWagered)
+    .slice(0, 8);
+
+  for (let i = 0; i < 8; i++) {
+    const idx = i + 1;
+    if (i < entries.length) {
+      const [type, stats] = entries[i];
+      const net = stats.totalPaid - (stats.totalWagered - stats.totalPaid);
+      setText(e, `an-${idx}`, type.replace('_', ' '));
+      setText(e, `an-${idx}c`, String(stats.placed));
+      setText(e, `an-${idx}w`, String(stats.won));
+      setText(e, `an-${idx}l`, String(stats.lost));
+      setText(e, `an-${idx}n`, `${net >= 0 ? '+' : ''}$${net}`);
+    } else {
+      setText(e, `an-${idx}`, '--');
+      setText(e, `an-${idx}c`, '-');
+      setText(e, `an-${idx}w`, '-');
+      setText(e, `an-${idx}l`, '-');
+      setText(e, `an-${idx}n`, '-');
+    }
+  }
+
+  // Best/worst performers
+  if (entries.length > 0) {
+    const best = entries.reduce((a, b) => (b[1].totalPaid - b[1].totalWagered) > (a[1].totalPaid - a[1].totalWagered) ? b : a);
+    const worst = entries.reduce((a, b) => (b[1].totalPaid - b[1].totalWagered) < (a[1].totalPaid - a[1].totalWagered) ? b : a);
+    setText(e, 'analytics-best', `Best: ${best[0]} (+$${best[1].totalPaid})`);
+    setText(e, 'analytics-worst', `Worst: ${worst[0]} (-$${worst[1].totalWagered - worst[1].totalPaid})`);
+  }
+}
+
+function updateVipPanel() {
+  const e = panelEntities.get('vip');
+  if (!e) return;
+  const lvl = Math.min(GM.career.vipLevel, VIP_LEVELS.length - 1);
+  const vip = VIP_LEVELS[lvl];
+  setText(e, 'vip-level', vip.name.toUpperCase());
+  setText(e, 'vip-desc', vip.perk);
+  setText(e, 'vip-comps', String(GM.career.compPoints));
+  const nextLvl = lvl < VIP_LEVELS.length - 1 ? VIP_LEVELS[lvl + 1] : null;
+  setText(e, 'vip-next', nextLvl ? `${nextLvl.min - GM.career.compPoints} pts to ${nextLvl.name}` : 'MAX LEVEL');
+  setText(e, 'vip-wagered', `$${GM.career.totalWagered}`);
+  setText(e, 'vip-min', '$1');
+  setText(e, 'vip-max', `$${vip.maxBet}`);
+  // Perks
+  const perks = ['Table access', vip.maxBet >= 250 ? 'Higher limits' : '', vip.maxBet >= 500 ? 'Gold status' : ''];
+  setText(e, 'vip-perk1', `Perk: ${perks[0] || '--'}`);
+  setText(e, 'vip-perk2', `Perk: ${perks[1] || '--'}`);
+  setText(e, 'vip-perk3', `Perk: ${perks[2] || '--'}`);
+  setText(e, 'vip-history', `Career games: ${GM.career.games} | Total rolls: ${GM.career.totalRolls}`);
+}
+
+function updateDealerPanel() {
+  const e = panelEntities.get('dealer');
+  if (!e) return;
+  setText(e, 'dealer-call', GM.dealerCall);
+  setText(e, 'dealer-sub', GM.dealerSub);
+  setText(e, 'dealer-detail', GM.dealerDetail);
+}
+
 function updateSkinsPanel() {
   const e = panelEntities.get('skins');
   if (!e) return;
@@ -1719,6 +1931,9 @@ function updatePanelVisibility() {
     toast: GM.toastTimer > 0,
     hotcold: gameplay,
     strategy: s === 'strategy',
+    analytics: s === 'analytics',
+    vip: s === 'vip',
+    dealer: gameplay && GM.dealerTimer > 0,
   };
   panelEntities.forEach((e, name) => {
     const shouldShow = vis[name] || false;
@@ -1763,6 +1978,9 @@ class CrapsUISystem extends createSystem({
   toast: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/toast.json')] },
   hotcold: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/hotcold.json')] },
   strategy: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/strategy.json')] },
+  analytics: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/analytics.json')] },
+  vip: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/vip.json')] },
+  dealer: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/dealer.json')] },
 }) {
   init() {
     const wire = (doc: UIKitDocument, id: string, fn: () => void) => {
@@ -1786,6 +2004,8 @@ class CrapsUISystem extends createSystem({
       wire(doc, 'btn-settings', () => { audio.playSfx('click'); GM.state = 'settings'; updateSettingsPanel(); });
       wire(doc, 'btn-help', () => { audio.playSfx('click'); GM.state = 'help'; });
       wire(doc, 'btn-strategy', () => { audio.playSfx('click'); GM.state = 'strategy'; });
+      wire(doc, 'btn-analytics', () => { audio.playSfx('click'); GM.state = 'analytics'; updateAnalyticsPanel(); });
+      wire(doc, 'btn-vip', () => { audio.playSfx('click'); GM.state = 'vip'; updateVipPanel(); });
     });
 
     // ── Mode ──
@@ -1871,6 +2091,16 @@ class CrapsUISystem extends createSystem({
           GM.bets = GM.lastBets.map(b => ({ ...b }));
           updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights();
         }
+      });
+      wire(doc, 'btn-dontcome', () => { audio.playSfx('bet_place'); GM.addBet('dontcome', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-big6', () => { audio.playSfx('bet_place'); GM.addBet('big6', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-big8', () => { audio.playSfx('bet_place'); GM.addBet('big8', GM.chipSize); updateHUD(); updateBetsPanel(); updateAllChipStacks(); updateBetZoneHighlights(); });
+      wire(doc, 'btn-autoroll', () => {
+        GM.autoRoll = !GM.autoRoll;
+        GM.save();
+        const ae = panelEntities.get('betting');
+        if (ae) setText(ae, 'autoroll-label', GM.autoRoll ? 'Auto: ON' : 'Auto: OFF');
+        GM.toastQueue.push(GM.autoRoll ? 'Auto-Roll ON' : 'Auto-Roll OFF');
       });
     });
 
@@ -1958,6 +2188,20 @@ class CrapsUISystem extends createSystem({
       wire(doc, 'btn-back', () => { audio.playSfx('click'); GM.state = 'title'; });
     });
 
+    // ── Analytics ──
+    this.queries.analytics.subscribe('qualify', (entity: Entity) => {
+      const doc = getDoc(entity); if (!doc) return;
+      wire(doc, 'btn-back', () => { audio.playSfx('click'); GM.state = 'title'; });
+    });
+
+    // ── VIP ──
+    this.queries.vip.subscribe('qualify', (entity: Entity) => {
+      const doc = getDoc(entity); if (!doc) return;
+      wire(doc, 'btn-back', () => { audio.playSfx('click'); GM.state = 'title'; });
+    });
+
+    // ── Dealer — no buttons ──
+
     // ── Hot/Cold — no buttons needed ──
   }
 
@@ -1972,6 +2216,8 @@ class CrapsGameSystem extends createSystem({}) {
   private streakFireTimer = 0;
   private diceTrailTimer = 0;
   private puckPulsePhase = 0;
+  private autoRollAccum = 0;
+  private autoResultAccum = 0;
 
   update(delta: number, time: number) {
     // Dice physics
@@ -2096,6 +2342,39 @@ class CrapsGameSystem extends createSystem({}) {
     }
     if (GM.toastTimer > 0) GM.toastTimer -= delta;
 
+    // Dealer callout timer
+    if (GM.dealerTimer > 0) {
+      GM.dealerTimer -= delta;
+      updateDealerPanel();
+    }
+
+    // Auto-roll logic
+    if (GM.autoRoll && GM.state === 'betting' && !GM.diceAnimating && GM.bets.length > 0) {
+      this.autoRollAccum += delta;
+      if (this.autoRollAccum >= GM.autoRollDelay) {
+        this.autoRollAccum = 0;
+        throwDice();
+      }
+    } else {
+      this.autoRollAccum = 0;
+    }
+
+    // Auto-continue from result to betting
+    if (GM.autoRoll && GM.state === 'result' && !GM.diceAnimating) {
+      this.autoResultAccum += delta;
+      if (this.autoResultAccum >= 1.5) {
+        this.autoResultAccum = 0;
+        GM.state = 'betting';
+        // Re-place last bets if auto-roll
+        if (GM.lastBets.length > 0) {
+          GM.bets = GM.lastBets.map(b => ({ ...b }));
+        }
+        updateHUD(); updateBetsPanel(); updateHistoryPanel(); updateAllChipStacks(); updateBetZoneHighlights();
+      }
+    } else {
+      this.autoResultAccum = 0;
+    }
+
     // HUD updates during gameplay
     const gameplay = GM.state === 'betting' || GM.state === 'rolling' || GM.state === 'result';
     if (gameplay) updateHUD();
@@ -2207,6 +2486,9 @@ async function main() {
     { name: 'toast', config: './ui/toast.json', follower: true, ox: 0, oy: 0.3, oz: -1.0 },
     { name: 'hotcold', config: './ui/hotcold.json', follower: false },
     { name: 'strategy', config: './ui/strategy.json', follower: false },
+    { name: 'analytics', config: './ui/analytics.json', follower: false },
+    { name: 'vip', config: './ui/vip.json', follower: false },
+    { name: 'dealer', config: './ui/dealer.json', follower: true, ox: 0, oy: 0.15, oz: -1.0 },
   ];
 
   panelConfigs.filter(p => p.follower).forEach(p => followerNames.add(p.name));
@@ -2252,6 +2534,12 @@ async function main() {
     if (e.code === 'Digit5') { GM.chipSize = 100; audio.playSfx('chip_select'); }
     if (e.code === 'KeyC' && GM.state === 'betting') { audio.playSfx('bet_clear'); GM.clearBets(); updateHUD(); updateBetsPanel(); }
     if (e.code === 'KeyR' && GM.state === 'betting' && GM.lastBets.length > 0) { GM.bets = GM.lastBets.map(b => ({ ...b })); audio.playSfx('bet_place'); updateHUD(); updateBetsPanel(); }
+    if (e.code === 'KeyA' && GM.state === 'betting') {
+      GM.autoRoll = !GM.autoRoll; GM.save();
+      const ae = panelEntities.get('betting');
+      if (ae) setText(ae, 'autoroll-label', GM.autoRoll ? 'Auto: ON' : 'Auto: OFF');
+      GM.toastQueue.push(GM.autoRoll ? 'Auto-Roll ON' : 'Auto-Roll OFF');
+    }
     if (e.code === 'Escape' || e.code === 'KeyP') {
       if (GM.state === 'betting' || GM.state === 'result') GM.state = 'pause';
       else if (GM.state === 'pause') { GM.state = 'betting'; updateHUD(); }

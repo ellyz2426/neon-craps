@@ -1,0 +1,181 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "container",
+        "type": "custom",
+        "children": [
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "PLACE YOUR BETS!"
+            ],
+            "properties": {
+              "class": "dealer-text",
+              "id": "dealer-call"
+            },
+            "dataUid": "uid-3"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "dealer-sub",
+              "id": "dealer-sub"
+            },
+            "dataUid": "uid-4"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [],
+            "properties": {
+              "class": "dealer-detail",
+              "id": "dealer-detail"
+            },
+            "dataUid": "uid-5"
+          }
+        ],
+        "properties": {
+          "class": "root"
+        },
+        "dataUid": "uid-2"
+      }
+    ],
+    "properties": {},
+    "dataUid": "uid-1"
+  },
+  "classes": {
+    "root": {
+      "content": {
+        "flexDirection": "column",
+        "padding": "8",
+        "gap": "4",
+        "alignItems": "center",
+        "width": "300",
+        "backgroundColor": "rgba(0,10,10,0.85)",
+        "borderRadius": 6,
+        "borderWidth": "1",
+        "borderColor": "#00aaaa"
+      }
+    },
+    "dealer-text": {
+      "content": {
+        "color": "#ffff00",
+        "fontSize": "14",
+        "fontWeight": "bold",
+        "textAlign": "center"
+      }
+    },
+    "dealer-sub": {
+      "content": {
+        "color": "#00ffff",
+        "fontSize": "10",
+        "textAlign": "center"
+      }
+    },
+    "dealer-detail": {
+      "content": {
+        "color": "#cccccc",
+        "fontSize": "9",
+        "textAlign": "center"
+      }
+    }
+  },
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 12,
+        "column": 8
+      }
+    },
+    "root": {
+      "start": {
+        "line": 2,
+        "column": 4
+      },
+      "end": {
+        "line": 2,
+        "column": 9
+      }
+    },
+    "dealer-text": {
+      "start": {
+        "line": 3,
+        "column": 4
+      },
+      "end": {
+        "line": 3,
+        "column": 16
+      }
+    },
+    "dealer-sub": {
+      "start": {
+        "line": 4,
+        "column": 4
+      },
+      "end": {
+        "line": 4,
+        "column": 15
+      }
+    },
+    "dealer-detail": {
+      "start": {
+        "line": 5,
+        "column": 4
+      },
+      "end": {
+        "line": 5,
+        "column": 18
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 7,
+        "column": 2
+      },
+      "end": {
+        "line": 11,
+        "column": 14
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 8,
+        "column": 4
+      },
+      "end": {
+        "line": 8,
+        "column": 70
+      }
+    },
+    "uid-4": {
+      "start": {
+        "line": 9,
+        "column": 4
+      },
+      "end": {
+        "line": 9,
+        "column": 52
+      }
+    },
+    "uid-5": {
+      "start": {
+        "line": 10,
+        "column": 4
+      },
+      "end": {
+        "line": 10,
+        "column": 58
+      }
+    }
+  }
+}

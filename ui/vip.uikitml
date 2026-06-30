@@ -1,0 +1,38 @@
+<panel>
+  <style>
+    .root { flex-direction: column; padding: 12; gap: 6; align-items: center; width: 340; background-color: rgba(0,20,20,0.92); border-radius: 8; border-width: 1; border-color: #ffaa00; }
+    .title { color: #ffaa00; font-size: 16; font-weight: bold; }
+    .sep { width: 310; height: 1; background-color: #442200; }
+    .row { flex-direction: row; width: 310; justify-content: space-between; }
+    .label { color: #cccccc; font-size: 10; }
+    .value { color: #ffaa00; font-size: 10; font-weight: bold; }
+    .level-row { flex-direction: column; align-items: center; gap: 3; }
+    .level-name { color: #ffaa00; font-size: 14; font-weight: bold; }
+    .level-desc { color: #aaaaaa; font-size: 9; }
+    .perk { color: #44ff44; font-size: 9; }
+    .progress-bg { width: 280; height: 8; background-color: #222222; border-radius: 4; }
+    .progress-fill { width: 140; height: 8; background-color: #ffaa00; border-radius: 4; }
+    .btn { background-color: #442200; padding: 6; border-radius: 4; border-width: 1; border-color: #ffaa00; margin-top: 4; }
+    .btntext { color: #ffaa00; font-size: 10; text-align: center; }
+  </style>
+  <container class="root">
+    <text class="title">VIP LOUNGE</text>
+    <container class="level-row">
+      <text class="level-name" id="vip-level">BRONZE</text>
+      <text class="level-desc" id="vip-desc">Welcome to the table</text>
+    </container>
+    <container class="sep"></container>
+    <container class="row"><text class="label">Comp Points</text><text class="value" id="vip-comps">0</text></container>
+    <container class="row"><text class="label">Next Level</text><text class="value" id="vip-next">100 pts</text></container>
+    <container class="row"><text class="label">Total Wagered</text><text class="value" id="vip-wagered">$0</text></container>
+    <container class="row"><text class="label">Table Min</text><text class="value" id="vip-min">$1</text></container>
+    <container class="row"><text class="label">Table Max</text><text class="value" id="vip-max">$100</text></container>
+    <container class="sep"></container>
+    <text class="perk" id="vip-perk1">Perk: --</text>
+    <text class="perk" id="vip-perk2">Perk: --</text>
+    <text class="perk" id="vip-perk3">Perk: --</text>
+    <container class="sep"></container>
+    <text class="label" id="vip-history">Recent comps: --</text>
+    <container class="btn" id="btn-back"><text class="btntext">BACK</text></container>
+  </container>
+</panel>

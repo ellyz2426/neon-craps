@@ -10,6 +10,8 @@
   <text name="btn-skins" fontSize="16" color="#ffff44" backgroundColor="#333300" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#555500">DICE SKINS</text>
   <text name="btn-settings" fontSize="16" color="#8888ff" backgroundColor="#222244" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#444466">SETTINGS</text>
   <text name="btn-help" fontSize="16" color="#aaaaaa" backgroundColor="#222222" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#444444">HELP</text>
+  <text name="btn-analytics" fontSize="16" color="#00dddd" backgroundColor="#002222" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#004444">ANALYTICS</text>
+  <text name="btn-vip" fontSize="16" color="#ffaa00" backgroundColor="#332200" padding="6" paddingLeft="20" paddingRight="20" borderRadius="4" cursor="pointer" hover-backgroundColor="#554400">VIP LOUNGE</text>
   <container height="4"></container>
   <text name="level-display" fontSize="10" color="#666666">Level 1 - Beginner</text>
   <text name="career-rolls" fontSize="9" color="#444444">Career Rolls: 0</text>
